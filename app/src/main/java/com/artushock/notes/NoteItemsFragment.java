@@ -44,7 +44,7 @@ public class NoteItemsFragment extends Fragment {
     }
 
     private void showNoteFragment(Note note) {
-        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             showNoteLandFragment(note);
         } else {
             showNotePortraitFragment(note);
@@ -70,9 +70,8 @@ public class NoteItemsFragment extends Fragment {
     }
 
 
-
     private void setTestNoteData() {
-        noteItems.add(new Note("Стрижка", "Постричься", new Date(1231231231231l), "Постричься"));
+        noteItems.add(new Note("Стрижка", "Постричься", new Date(), "Постричься"));
         noteItems.add(new Note("Химчистка", "Заехать в химчистку", new Date(), "Завзти в химчистку шубу жены"));
         noteItems.add(new Note("Заправка", "Заправить машину", new Date(), "Заправить машину на все деньги"));
         noteItems.add(new Note("Собака", "Выгулять собаку", new Date(), "Выгулять собаку"));

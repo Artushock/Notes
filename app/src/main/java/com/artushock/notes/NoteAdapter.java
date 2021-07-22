@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class NoteAdapter extends ArrayAdapter<Note> {
@@ -28,7 +27,7 @@ public class NoteAdapter extends ArrayAdapter<Note> {
 
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        View view=inflater.inflate(this.noteItemLayout, parent, false);
+        View view = inflater.inflate(this.noteItemLayout, parent, false);
 
         TextView noteItemCapture = view.findViewById(R.id.note_item_capture);
         TextView noteItemDescription = view.findViewById(R.id.note_item_description);

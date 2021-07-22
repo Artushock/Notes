@@ -2,19 +2,15 @@ package com.artushock.notes;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
-import java.text.SimpleDateFormat;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 
 public class NoteFragment extends Fragment {
@@ -67,24 +63,23 @@ public class NoteFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+
+        if (savedInstanceState != null){
+            note = savedInstanceState.getParcelable(ARG_CITY);
+        }
 
         captureNote.setText(note.getNoteCapture());
         descriptionNote.setText(note.getNoteDescription());
-        // TODO Solve problem with field Date date
+        // TODO Solve problem with the field in portrait landscape
         //dateNote.setText(note.getCreationDateFormatted());
         contentNote.setText(note.getNoteContent());
 
-        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             backButton.setVisibility(Button.INVISIBLE);
         }
 
-
-        backButton.setOnClickListener(v -> {
-            getActivity().finish();
-        });
-
+        backButton.setOnClickListener(v -> getActivity().finish());
     }
-
 }
