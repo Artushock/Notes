@@ -71,10 +71,10 @@ public class NoteItemsFragment extends Fragment {
 
 
     private void setTestNoteData() {
-        noteItems.add(new Note("Стрижка", "Постричься", new Date(), "Постричься"));
-        noteItems.add(new Note("Химчистка", "Заехать в химчистку", new Date(), "Завзти в химчистку шубу жены"));
-        noteItems.add(new Note("Заправка", "Заправить машину", new Date(), "Заправить машину на все деньги"));
-        noteItems.add(new Note("Собака", "Выгулять собаку", new Date(), "Выгулять собаку"));
-        noteItems.add(new Note("Подарки", "Купить подарки", new Date(), "Купить подарки детям"));
+        noteItems.add(new Note("Стрижка", "Постричься", new Date().getTime(), "Постричься"));
+        noteItems.add(new Note("Химчистка", "Заехать в химчистку", new Date().getTime(), "Завзти в химчистку шубу жены"));
+        noteItems.add(new Note("Заправка", "Заправить машину", new Date().getTime(), "Заправить машину на все деньги"));
+        noteItems.add(new Note("Собака", "Выгулять собаку", new Date().getTime(), "Выгулять собаку"));
+        noteItems.add(new Note("Подарки", "Купить подарки", new Date().getTime(), "Купить подарки детям"));
     }
 }

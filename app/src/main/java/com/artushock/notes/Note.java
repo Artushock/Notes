@@ -2,6 +2,7 @@ package com.artushock.notes;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.provider.ContactsContract;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -10,7 +11,14 @@ public class Note implements Parcelable {
     private String noteCapture;
     private String noteDescription;
     private String noteContent;
-    private Date creationDate;
+    private long creationDate;
+
+    public Note(Parcel in) {
+        noteCapture = in.readString();
+        noteDescription = in.readString();
+        noteContent = in.readString();
+        creationDate = in.readLong();
+    }
 
     public String getNoteCapture() {
         return noteCapture;
@@ -24,7 +32,7 @@ public class Note implements Parcelable {
         return noteContent;
     }
 
-    public Date getCreationDate() {
+    public long getCreationDate() {
         return creationDate;
     }
 
@@ -34,7 +42,7 @@ public class Note implements Parcelable {
         return simpleDateFormat.format(creationDate);
     }
 
-    public Note(String noteCapture, String noteDescription, Date date, String noteContent) {
+    public Note(String noteCapture, String noteDescription, long date, String noteContent) {
         this.noteCapture = noteCapture;
         this.noteDescription = noteDescription;
         this.noteContent = noteContent;
@@ -42,13 +50,7 @@ public class Note implements Parcelable {
     }
 
     public Note(String noteCapture, String noteDescription, String noteContent) {
-        new Note(noteCapture, noteDescription, new Date(), noteContent);
-    }
-
-    protected Note(Parcel in) {
-        noteCapture = in.readString();
-        noteDescription = in.readString();
-        noteContent = in.readString();
+        new Note(noteCapture, noteDescription, new Date().getTime(), noteContent);
     }
 
     @Override
@@ -56,6 +58,7 @@ public class Note implements Parcelable {
         dest.writeString(noteCapture);
         dest.writeString(noteDescription);
         dest.writeString(noteContent);
+        dest.writeLong(creationDate);
     }
 
     @Override

@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 public class NoteActivity extends AppCompatActivity {
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

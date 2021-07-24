@@ -40,9 +40,16 @@ public class NoteFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null) {
             note = getArguments().getParcelable(ARG_CITY);
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(ARG_CITY, note);
     }
 
     @Override
@@ -50,10 +57,10 @@ public class NoteFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_note, container, false);
-        return initEditNoteFields(view);
+        return initNoteViewFields(view);
     }
 
-    private View initEditNoteFields(View view) {
+    private View initNoteViewFields(View view) {
         captureNote = view.findViewById(R.id.note_capture);
         descriptionNote = view.findViewById(R.id.note_description);
         dateNote = view.findViewById(R.id.note_date);
@@ -73,7 +80,7 @@ public class NoteFragment extends Fragment {
         captureNote.setText(note.getNoteCapture());
         descriptionNote.setText(note.getNoteDescription());
         // TODO Solve problem with the field in portrait landscape
-        //dateNote.setText(note.getCreationDateFormatted());
+        dateNote.setText(note.getCreationDateFormatted());
         contentNote.setText(note.getNoteContent());
 
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
