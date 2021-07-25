@@ -33,14 +33,19 @@ public class NoteItemsFragment extends Fragment {
         noteItemList = view.findViewById(R.id.list_view_fragment);
         setTestNoteData();
 
-        NoteAdapter noteAdapter = new NoteAdapter(view.getContext(), R.layout.note_item_layout, noteItems);
-        noteItemList.setAdapter(noteAdapter);
+        initView(view);
+
+
     }
 
-    @Override
-    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
-        super.onViewStateRestored(savedInstanceState);
-        noteItemList.setOnItemClickListener((parent, view, position, id) -> showNoteFragment(noteItems.get(position)));
+    private void initView(View view) {
+        initAdapter(view);
+    }
+
+    private void initAdapter(View view) {
+        NoteAdapter noteAdapter = new NoteAdapter(view.getContext(), R.layout.note_item_layout, noteItems);
+        noteItemList.setAdapter(noteAdapter);
+        noteItemList.setOnItemClickListener((parent, view1, position, id) -> showNoteFragment(noteItems.get(position)));
     }
 
     private void showNoteFragment(Note note) {

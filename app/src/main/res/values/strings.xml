@@ -4,4 +4,5 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="back_button_str">Назад</string>
     <string name="add_button_str">Добавить</string>
+    <string name="fab_content_desc">Добавить заметку</string>
 </resources>
