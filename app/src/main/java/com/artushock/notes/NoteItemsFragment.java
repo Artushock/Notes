@@ -1,10 +1,12 @@
 package com.artushock.notes;
 
+import android.annotation.SuppressLint;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
@@ -15,8 +17,10 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.artushock.notes.fragments.AboutAppFragment;
 import com.artushock.notes.fragments.EditNewFragment;
 import com.artushock.notes.fragments.NoteFragment;
+import com.artushock.notes.fragments.SettingsFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -39,8 +43,27 @@ public class NoteItemsFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        inflater.inflate(R.menu.main_menu, menu);
+        if (!menu.hasVisibleItems()){
+            inflater.inflate(R.menu.main_menu, menu);
+        }
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @SuppressLint("NonConstantResourceId")
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.add_note_menu:
+                addFragment(new EditNewFragment());
+                return true;
+            case R.id.app_settings_menu:
+                addFragment(new SettingsFragment());
+                return true;
+            case R.id.about_app_menu:
+                addFragment(new AboutAppFragment());
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
