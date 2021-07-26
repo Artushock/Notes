@@ -62,8 +62,8 @@ public class NoteItemsFragment extends Fragment {
             case R.id.about_app_menu:
                 addFragment(new AboutAppFragment());
                 return true;
+            default: return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override

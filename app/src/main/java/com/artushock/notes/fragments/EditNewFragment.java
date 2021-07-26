@@ -34,13 +34,24 @@ public class EditNewFragment extends Fragment {
     private void initView(View view) {
         noteCaptureInputText = view.findViewById(R.id.note_capture_input_edit_text);
         noteDescriptionInputText = view.findViewById(R.id.note_description_input_edit_text);
-        noteDateInputText = view.findViewById(R.id.note_date_input_edit_text);
-        noteContentInputText = view.findViewById(R.id.note_content_input_edit_text);
-        addNoteButton = view.findViewById(R.id.add_note_button);
-        cancelNoteButton = view.findViewById(R.id.cancel_note_button);
 
+        noteDateInputText = view.findViewById(R.id.note_date_input_edit_text);
+        noteDateInputText.setOnClickListener(v -> {
+            noteDateInputTextHandling(v);
+        });
+        noteContentInputText = view.findViewById(R.id.note_content_input_edit_text);
+
+        addNoteButton = view.findViewById(R.id.add_note_button);
         addNoteButton.setOnClickListener(v -> addNoteButtonHandling(v));
+
+        cancelNoteButton = view.findViewById(R.id.cancel_note_button);
         cancelNoteButton.setOnClickListener(v -> cancelNoteButtonHandling(v));
+
+
+    }
+
+    private void noteDateInputTextHandling(View v) {
+
     }
 
     private void cancelNoteButtonHandling(View v) {

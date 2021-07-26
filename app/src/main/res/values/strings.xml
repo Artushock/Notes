@@ -15,4 +15,6 @@
     <string name="settings_menu_str">Настройки</string>
     <string name="add_note_menu_str">Добавить заметку</string>
     <string name="about_app_menu_str">О приложении</string>
+    <string name="edit_note_menu_str">Редактировать</string>
+    <string name="save_str">Сохранить</string>
 </resources>
