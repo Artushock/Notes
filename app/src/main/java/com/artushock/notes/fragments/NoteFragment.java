@@ -1,4 +1,4 @@
-package com.artushock.notes;
+package com.artushock.notes.fragments;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -11,6 +11,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import com.artushock.notes.Note;
+import com.artushock.notes.R;
 
 
 public class NoteFragment extends Fragment {
