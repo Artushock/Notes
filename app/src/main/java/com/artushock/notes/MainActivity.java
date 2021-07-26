@@ -1,6 +1,7 @@
 package com.artushock.notes;
 
 import android.os.Bundle;
+import android.view.Menu;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,7 +10,6 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     public static ArrayList<Note> noteItems = new ArrayList<>();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
