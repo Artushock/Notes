@@ -17,4 +17,6 @@
     <string name="about_app_menu_str">О приложении</string>
     <string name="edit_note_menu_str">Редактировать</string>
     <string name="save_str">Сохранить</string>
+    <string name="nav_header_title">Artiom Ponomariov</string>
+    <string name="nav_header_subtitle">Home work 7</string>
 </resources>
