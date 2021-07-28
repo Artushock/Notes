@@ -11,5 +11,5 @@
     <item
         android:id="@+id/about_app_menu"
         android:orderInCategory="2"
-        android:title="@string/about_app_menu_str" />
+        android:title="@string/about_app_str" />
 </menu>
