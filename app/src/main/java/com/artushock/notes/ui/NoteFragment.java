@@ -13,7 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.artushock.notes.Note;
+import com.artushock.notes.data.Note;
 import com.artushock.notes.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 

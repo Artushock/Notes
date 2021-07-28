@@ -4,10 +4,8 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -16,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.artushock.notes.data.Note;
 import com.artushock.notes.ui.AboutAppFragment;
 import com.artushock.notes.ui.EditNewFragment;
 import com.artushock.notes.ui.SettingsFragment;
@@ -35,11 +34,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, noteItemsFragment).commit();
 
         initView();
+
     }
 
     private void initView() {
         initToolbar();
         initNavigationMenu();
+        initStartFragment();
+    }
+
+    private void initStartFragment() {
+        addFragment(NoteItemsFragment.newInstance());
     }
 
     private void initNavigationMenu() {
