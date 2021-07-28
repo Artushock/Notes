@@ -1,4 +1,4 @@
-package com.artushock.notes.fragments;
+package com.artushock.notes.ui;
 
 import android.os.Bundle;
 
@@ -28,9 +28,7 @@ public class SetDateFragment extends Fragment {
 
     private void initView(View view) {
         saveDateButton = view.findViewById(R.id.save_date_btn);
-        saveDateButton.setOnClickListener(v -> {
-            saveDateButtonHandling(v);
-        });
+        saveDateButton.setOnClickListener(this::saveDateButtonHandling);
     }
 
     private void saveDateButtonHandling(View v) {

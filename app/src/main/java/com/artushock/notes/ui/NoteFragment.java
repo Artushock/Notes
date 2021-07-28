@@ -1,4 +1,4 @@
-package com.artushock.notes.fragments;
+package com.artushock.notes.ui;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -96,9 +96,7 @@ public class NoteFragment extends Fragment {
         dateNote.setText(note.getCreationDateFormatted());
         contentNote.setText(note.getNoteContent());
 
-        editFab.setOnClickListener(v -> {
-            editNoteFabHandling(v);
-        });
+        editFab.setOnClickListener(this::editNoteFabHandling);
     }
 
     private void editNoteFabHandling(View v) {

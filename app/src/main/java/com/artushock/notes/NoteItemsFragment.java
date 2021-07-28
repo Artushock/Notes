@@ -17,10 +17,10 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.artushock.notes.fragments.AboutAppFragment;
-import com.artushock.notes.fragments.EditNewFragment;
-import com.artushock.notes.fragments.NoteFragment;
-import com.artushock.notes.fragments.SettingsFragment;
+import com.artushock.notes.ui.AboutAppFragment;
+import com.artushock.notes.ui.EditNewFragment;
+import com.artushock.notes.ui.NoteFragment;
+import com.artushock.notes.ui.SettingsFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package com.artushock.notes.fragments;
+package com.artushock.notes.ui;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -36,16 +36,14 @@ public class EditNewFragment extends Fragment {
         noteDescriptionInputText = view.findViewById(R.id.note_description_input_edit_text);
 
         noteDateInputText = view.findViewById(R.id.note_date_input_edit_text);
-        noteDateInputText.setOnClickListener(v -> {
-            noteDateInputTextHandling(v);
-        });
+        noteDateInputText.setOnClickListener(this::noteDateInputTextHandling);
         noteContentInputText = view.findViewById(R.id.note_content_input_edit_text);
 
         addNoteButton = view.findViewById(R.id.add_note_button);
-        addNoteButton.setOnClickListener(v -> addNoteButtonHandling(v));
+        addNoteButton.setOnClickListener(this::addNoteButtonHandling);
 
         cancelNoteButton = view.findViewById(R.id.cancel_note_button);
-        cancelNoteButton.setOnClickListener(v -> cancelNoteButtonHandling(v));
+        cancelNoteButton.setOnClickListener(this::cancelNoteButtonHandling);
 
 
     }
