@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -45,6 +46,12 @@ public class NoteItemsFragment extends Fragment {
 
         NoteAdapter noteAdapter = new NoteAdapter(noteSource);
         recyclerView.setAdapter(noteAdapter);
+
+        noteAdapter.setItemClickListener((view, position) -> addFragment(new EditNewFragment()));
+
+        noteAdapter.setEditClickListener((view, position) -> Toast.makeText(getContext(), "Редактировать заметку", Toast.LENGTH_SHORT).show());
+
+        noteAdapter.setCheckedChangeListener((view, position, isChecked) -> Toast.makeText(getContext(), "checkBox is " + isChecked, Toast.LENGTH_SHORT).show());
     }
 
     @Override
