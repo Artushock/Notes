@@ -15,12 +15,15 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.artushock.notes.MainActivity;
 import com.artushock.notes.R;
 import com.artushock.notes.data.NoteSource;
-import com.artushock.notes.data.NoteSourceImpl;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class NoteItemsFragment extends Fragment {
+
+    public NoteItemsFragment() {
+    }
 
     public static NoteItemsFragment newInstance() {
         return new NoteItemsFragment();
@@ -32,7 +35,7 @@ public class NoteItemsFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_note_items, container, false);
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view_list);
-        NoteSource noteSource = new NoteSourceImpl().startInit();
+        NoteSource noteSource = (NoteSource) getArguments().getSerializable(MainActivity.NOTE_SOURCE_KEY);
         initRecyclerView(recyclerView, noteSource);
         return view;
     }

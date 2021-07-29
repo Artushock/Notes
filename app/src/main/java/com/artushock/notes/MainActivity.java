@@ -2,6 +2,7 @@ package com.artushock.notes;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -14,38 +15,55 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.artushock.notes.data.Note;
+import com.artushock.notes.data.NoteSource;
+import com.artushock.notes.data.NoteSourceImpl;
 import com.artushock.notes.ui.AboutAppFragment;
 import com.artushock.notes.ui.EditNewFragment;
 import com.artushock.notes.ui.NoteItemsFragment;
 import com.artushock.notes.ui.SettingsFragment;
 import com.google.android.material.navigation.NavigationView;
 
-import java.util.ArrayList;
+import java.io.Serializable;
+
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    public static ArrayList<Note> noteItems = new ArrayList<>();
+
+    private NoteSource noteSource;
+    public static final String NOTE_SOURCE_KEY = "NOTE_SOURCE_KEY";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        NoteItemsFragment noteItemsFragment = new NoteItemsFragment();
-        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, noteItemsFragment).commit();
-
         initView();
+    }
 
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState, @NonNull PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+        outState.putSerializable(NOTE_SOURCE_KEY, (Serializable) noteSource);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        noteSource = (NoteSource) savedInstanceState.getSerializable(NOTE_SOURCE_KEY);
     }
 
     private void initView() {
+        initNoteSourceData();
         initToolbar();
         initNavigationMenu();
-        initStartFragment();
+        initStartFragment(noteSource);
     }
 
-    private void initStartFragment() {
-        addFragment(NoteItemsFragment.newInstance());
+    private void initNoteSourceData() {
+        noteSource = NoteSourceImpl.getInstance();
+    }
+
+    private void initToolbar() {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
     }
 
     private void initNavigationMenu() {
@@ -53,9 +71,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
     }
 
-    private void initToolbar() {
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+    private void initStartFragment(NoteSource noteSource) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(NOTE_SOURCE_KEY, (Serializable) noteSource);
+        NoteItemsFragment noteItemsFragment = NoteItemsFragment.newInstance();
+        noteItemsFragment.setArguments(bundle);
+        addFragment(noteItemsFragment);
     }
 
     @Override
