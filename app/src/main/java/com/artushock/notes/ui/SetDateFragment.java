@@ -13,8 +13,8 @@ import android.widget.Toast;
 import com.artushock.notes.R;
 
 public class SetDateFragment extends Fragment {
-    private Button saveDateButton;
 
+    private Button saveDateButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

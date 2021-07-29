@@ -17,6 +17,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.artushock.notes.data.Note;
 import com.artushock.notes.ui.AboutAppFragment;
 import com.artushock.notes.ui.EditNewFragment;
+import com.artushock.notes.ui.NoteItemsFragment;
 import com.artushock.notes.ui.SettingsFragment;
 import com.google.android.material.navigation.NavigationView;
 

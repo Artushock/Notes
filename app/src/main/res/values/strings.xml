@@ -22,4 +22,5 @@
     <string name="app_name_version_str">Notes v.0.0.0.</string>
     <string name="app_author_str">Author: Ponomariov Artiom</string>
     <string name="app_part_developing_str">The part is developing</string>
+    <string name="edit_note_str">Редактировать заметку</string>
 </resources>

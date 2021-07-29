@@ -1,4 +1,4 @@
-package com.artushock.notes;
+package com.artushock.notes.ui;
 
 
 import android.os.Bundle;
@@ -15,10 +15,9 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.artushock.notes.R;
 import com.artushock.notes.data.NoteSource;
 import com.artushock.notes.data.NoteSourceImpl;
-import com.artushock.notes.ui.EditNewFragment;
-import com.artushock.notes.ui.NoteAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class NoteItemsFragment extends Fragment {
@@ -49,7 +48,8 @@ public class NoteItemsFragment extends Fragment {
 
         noteAdapter.setItemClickListener((view, position) -> addFragment(new EditNewFragment()));
 
-        noteAdapter.setEditClickListener((view, position) -> Toast.makeText(getContext(), "Редактировать заметку", Toast.LENGTH_SHORT).show());
+        noteAdapter.setEditClickListener((view, position) ->
+                addFragment(new EditCurrentNoteFragment(noteSource.getNoteData(position))));
 
         noteAdapter.setCheckedChangeListener((view, position, isChecked) -> Toast.makeText(getContext(), "checkBox is " + isChecked, Toast.LENGTH_SHORT).show());
     }
