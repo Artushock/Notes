@@ -19,7 +19,7 @@ import com.artushock.notes.data.NoteSource;
 import com.artushock.notes.data.NoteSourceImpl;
 import com.artushock.notes.ui.AboutAppFragment;
 import com.artushock.notes.ui.EditNewFragment;
-import com.artushock.notes.ui.NoteItemsFragment;
+import com.artushock.notes.ui.ItemsFragment;
 import com.artushock.notes.ui.SettingsFragment;
 import com.google.android.material.navigation.NavigationView;
 
@@ -74,9 +74,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void initStartFragment(NoteSource noteSource) {
         Bundle bundle = new Bundle();
         bundle.putSerializable(NOTE_SOURCE_KEY, (Serializable) noteSource);
-        NoteItemsFragment noteItemsFragment = NoteItemsFragment.newInstance();
-        noteItemsFragment.setArguments(bundle);
-        addFragment(noteItemsFragment);
+        ItemsFragment itemsFragment = ItemsFragment.newInstance();
+        itemsFragment.setArguments(bundle);
+        addFragment(itemsFragment);
     }
 
     @Override

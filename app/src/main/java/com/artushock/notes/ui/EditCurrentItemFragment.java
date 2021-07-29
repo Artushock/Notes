@@ -12,7 +12,7 @@ import com.artushock.notes.R;
 import com.artushock.notes.data.Note;
 import com.google.android.material.textfield.TextInputEditText;
 
-public class EditCurrentNoteFragment extends Fragment {
+public class EditCurrentItemFragment extends Fragment {
     private Note editedNote;
 
     private String editedNoteCapture;
@@ -26,7 +26,7 @@ public class EditCurrentNoteFragment extends Fragment {
     private TextInputEditText editNoteDateInputText;
     private TextInputEditText editNoteContentInputText;
 
-    public EditCurrentNoteFragment(Note note) {
+    public EditCurrentItemFragment(Note note) {
         this.editedNote = note;
     }
 
@@ -67,10 +67,12 @@ public class EditCurrentNoteFragment extends Fragment {
             Note note = new Note(
                     editedNoteCapture,
                     editedNoteDescription,
-                    editedLongDate, editedNoteContent);
+                    editedLongDate,
+                    editedNoteContent);
 
-            editedNote = note;
-
+            Bundle result = new Bundle();
+            result.putParcelable("bundleKey", note);
+            getParentFragmentManager().setFragmentResult("requestKey", result);
         });
     }
 

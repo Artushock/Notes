@@ -46,6 +46,10 @@ public class NoteSourceImpl implements NoteSource, Serializable {
         return notes.size();
     }
 
+    public void setNote(Note note, int position){
+        notes.set(position, note);
+    }
+
 
 }
 
