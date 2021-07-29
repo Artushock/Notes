@@ -1,8 +1,7 @@
-package com.artushock.notes;
+package com.artushock.notes.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.provider.ContactsContract;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
