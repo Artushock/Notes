@@ -73,6 +73,7 @@ public class EditCurrentItemFragment extends Fragment {
             Bundle result = new Bundle();
             result.putParcelable("bundleKey", note);
             getParentFragmentManager().setFragmentResult("requestKey", result);
+            getChildFragmentManager();
         });
     }
 

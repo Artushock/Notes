@@ -7,12 +7,17 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.artushock.notes.MainActivity;
 import com.artushock.notes.R;
+import com.artushock.notes.data.Note;
 import com.google.android.material.textfield.TextInputEditText;
 
-public class EditNewFragment extends Fragment {
+import java.util.Date;
+
+public class AddNoteFragment extends Fragment {
 
     private TextInputEditText noteCaptureInputText;
     private TextInputEditText noteDescriptionInputText;
@@ -20,6 +25,12 @@ public class EditNewFragment extends Fragment {
     private TextInputEditText noteContentInputText;
     private Button addNoteButton;
     private Button cancelNoteButton;
+
+    @Override
+    public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -53,12 +64,24 @@ public class EditNewFragment extends Fragment {
     }
 
     private void cancelNoteButtonHandling(View v) {
-        //TODO
-        Toast.makeText(getContext(), "From cancelNoteButtonHandling()", Toast.LENGTH_SHORT).show();
+        requireActivity().getSupportFragmentManager().popBackStack();
     }
 
     private void addNoteButtonHandling(View v) {
-        //TODO
+
+
+        Note newNote = new Note(
+                noteCaptureInputText.getText().toString(),
+                noteDescriptionInputText.getText().toString(),
+                new Date().getTime(),
+                noteContentInputText.getText().toString()
+        );
+
+        Bundle result = new Bundle();
+        result.putParcelable("addNewNote", newNote);
+        getParentFragmentManager().setFragmentResult("requestForAddingNote", result);
+        getParentFragmentManager().popBackStack();
+
         Toast.makeText(getContext(), "From addNoteButtonHandling()", Toast.LENGTH_SHORT).show();
     }
 }

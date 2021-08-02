@@ -18,7 +18,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.artushock.notes.data.NoteSource;
 import com.artushock.notes.data.NoteSourceImpl;
 import com.artushock.notes.ui.AboutAppFragment;
-import com.artushock.notes.ui.EditNewFragment;
+import com.artushock.notes.ui.AddNoteFragment;
 import com.artushock.notes.ui.ItemsFragment;
 import com.artushock.notes.ui.SettingsFragment;
 import com.google.android.material.navigation.NavigationView;
@@ -88,9 +88,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.add_note_menu:
-                addFragment(new EditNewFragment());
+                addFragment(new AddNoteFragment());
                 return true;
             case R.id.app_settings_menu:
                 addFragment(new SettingsFragment());
@@ -98,7 +98,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.about_app_menu:
                 addFragment(new AboutAppFragment());
                 return true;
-            default: return super.onOptionsItemSelected(item);
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 
@@ -107,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int itemId = item.getItemId();
 
-        switch(itemId){
+        switch (itemId) {
             case R.id.app_settings_menu:
                 addFragment(new SettingsFragment());
                 break;
@@ -115,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 addFragment(new AboutAppFragment());
                 break;
             case R.id.add_note_menu:
-                addFragment(new EditNewFragment());
+                addFragment(new AddNoteFragment());
                 break;
         }
 
@@ -135,7 +136,4 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         fragmentTransaction.commit();
     }
-
-
-
 }

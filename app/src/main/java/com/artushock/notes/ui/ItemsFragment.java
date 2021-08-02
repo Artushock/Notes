@@ -20,7 +20,6 @@ import com.artushock.notes.MainActivity;
 import com.artushock.notes.R;
 import com.artushock.notes.data.Note;
 import com.artushock.notes.data.NoteSource;
-import com.artushock.notes.data.NoteSourceImpl;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.jetbrains.annotations.NotNull;
@@ -33,6 +32,27 @@ public class ItemsFragment extends Fragment {
 
     public static ItemsFragment newInstance() {
         return new ItemsFragment();
+    }
+
+    @Override
+    public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        getParentFragmentManager().setFragmentResultListener("requestForAddingNote", this, new FragmentResultListener() {
+            @Override
+            public void onFragmentResult(@NonNull @NotNull String requestKey, @NonNull @NotNull Bundle result) {
+                Note newNote = result.getParcelable("addNewNote");
+                noteSource.addNote(newNote);
+            }
+        });
+
+        getParentFragmentManager().setFragmentResultListener("requestForEditingCurrentNote", this, new FragmentResultListener() {
+            @Override
+            public void onFragmentResult(@NonNull @NotNull String requestKey, @NonNull @NotNull Bundle result) {
+
+            }
+        });
+
     }
 
     @Override
@@ -55,7 +75,7 @@ public class ItemsFragment extends Fragment {
         NoteAdapter noteAdapter = new NoteAdapter(noteSource);
         recyclerView.setAdapter(noteAdapter);
 
-        noteAdapter.setItemClickListener((view, position) -> addFragment(new EditNewFragment()));
+        noteAdapter.setItemClickListener((view, position) -> addFragment(new AddNoteFragment()));
 
         noteAdapter.setEditClickListener(new NoteAdapter.OnEditClickListener() {
             @Override
@@ -86,7 +106,7 @@ public class ItemsFragment extends Fragment {
 
     private void initAddButton(View view) {
         FloatingActionButton addFab = view.findViewById(R.id.add_fab);
-        addFab.setOnClickListener(v -> addFragment(new EditNewFragment()));
+        addFab.setOnClickListener(v -> addFragment(new AddNoteFragment()));
     }
 
     private void addFragment(Fragment fragment) {
