@@ -23,6 +23,7 @@ import com.artushock.notes.NoteActivity;
 import com.artushock.notes.R;
 import com.artushock.notes.data.Note;
 import com.artushock.notes.data.NoteSource;
+import com.artushock.notes.data.NoteSourceImpl;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.jetbrains.annotations.NotNull;
@@ -144,7 +145,7 @@ public class ItemsFragment extends Fragment {
 
         switch (id){
             case R.id.edit_context_menu:
-                addFragment(new EditCurrentItemFragment(noteSource.getNoteData(currentPosition)));
+                addFragment(new EditCurrentItemFragment(NoteSourceImpl.getInstance().getNoteData(currentPosition)));
                 return true;
             case R.id.delete_context_menu:
                 noteSource.deleteNote(currentPosition);
