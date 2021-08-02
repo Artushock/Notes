@@ -48,7 +48,7 @@ public class NoteSourceImpl implements NoteSource, Serializable {
 
     @Override
     public void updateNote(Note note, int position) {
-        //todo
+        notes.set(position, note);
     }
 
     @Override

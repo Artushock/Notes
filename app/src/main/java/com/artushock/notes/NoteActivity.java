@@ -26,7 +26,7 @@ import com.google.android.material.navigation.NavigationView;
 import java.io.Serializable;
 
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class NoteActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private NoteSource noteSource;
     public static final String NOTE_SOURCE_KEY = "NOTE_SOURCE_KEY";
@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         bundle.putSerializable(NOTE_SOURCE_KEY, (Serializable) noteSource);
         ItemsFragment itemsFragment = ItemsFragment.newInstance();
         itemsFragment.setArguments(bundle);
-        addFragment(itemsFragment);
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, itemsFragment).commit();
     }
 
     @Override

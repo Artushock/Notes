@@ -25,4 +25,5 @@
     <string name="edit_note_str">Редактировать заметку</string>
     <string name="delete_context_menu_str">Удалить</string>
     <string name="edit_context_menu_str">Редактировать</string>
+    <string name="save_note_button_str">Сохранить</string>
 </resources>

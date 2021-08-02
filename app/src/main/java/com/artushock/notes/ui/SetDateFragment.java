@@ -8,13 +8,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.Toast;
 
 import com.artushock.notes.R;
 
+import java.util.Calendar;
+
 public class SetDateFragment extends Fragment {
 
     private Button saveDateButton;
+    private DatePicker datePicker;
+
+    public SetDateFragment() {
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -27,12 +34,20 @@ public class SetDateFragment extends Fragment {
     }
 
     private void initView(View view) {
+        datePicker = view.findViewById(R.id.set_date_date_picker);
         saveDateButton = view.findViewById(R.id.save_date_btn);
         saveDateButton.setOnClickListener(this::saveDateButtonHandling);
     }
 
     private void saveDateButtonHandling(View v) {
-        //TODO
-        Toast.makeText(getContext(), "From saveDateButtonHandling", Toast.LENGTH_SHORT).show();
+        getParentFragmentManager().popBackStack();
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth());
+
+        Bundle result = new Bundle();
+        result.putLong("addNoteDate", calendar.getTimeInMillis());
+        getParentFragmentManager().setFragmentResult("requestForAddNoteDate", result);
+        getParentFragmentManager().popBackStack();
     }
 }

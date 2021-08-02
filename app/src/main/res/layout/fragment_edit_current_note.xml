@@ -60,7 +60,7 @@
         android:id="@+id/edit_note_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/add_note_button_str"
+        android:text="@string/save_note_button_str"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/cancel_edit_note_button"

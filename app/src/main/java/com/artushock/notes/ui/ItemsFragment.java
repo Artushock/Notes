@@ -19,7 +19,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.artushock.notes.MainActivity;
+import com.artushock.notes.NoteActivity;
 import com.artushock.notes.R;
 import com.artushock.notes.data.Note;
 import com.artushock.notes.data.NoteSource;
@@ -70,7 +70,7 @@ public class ItemsFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_note_items, container, false);
         recyclerView = view.findViewById(R.id.recycler_view_list);
-        noteSource = (NoteSource) getArguments().getSerializable(MainActivity.NOTE_SOURCE_KEY);
+        noteSource = (NoteSource) getArguments().getSerializable(NoteActivity.NOTE_SOURCE_KEY);
         initRecyclerView(recyclerView, noteSource);
         return view;
     }
