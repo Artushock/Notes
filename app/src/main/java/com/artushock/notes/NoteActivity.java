@@ -92,11 +92,9 @@ public class NoteActivity extends AppCompatActivity implements NavigationView.On
             case R.id.add_note_menu:
                 addFragment(new AddNoteFragment());
                 return true;
-            case R.id.app_settings_menu:
-                addFragment(new SettingsFragment());
-                return true;
-            case R.id.about_app_menu:
-                addFragment(new AboutAppFragment());
+            case R.id.clear_all_note_menu:
+                noteSource.clearNoteList();
+                initStartFragment(noteSource);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -109,14 +107,15 @@ public class NoteActivity extends AppCompatActivity implements NavigationView.On
         int itemId = item.getItemId();
 
         switch (itemId) {
-            case R.id.app_settings_menu:
+            case R.id.app_settings_nav_menu:
                 addFragment(new SettingsFragment());
                 break;
-            case R.id.about_app_menu:
+            case R.id.about_app_nav_menu:
                 addFragment(new AboutAppFragment());
                 break;
-            case R.id.add_note_menu:
-                addFragment(new AddNoteFragment());
+            case R.id.exit_nav_menu:
+                finish();
+                System.exit(0);
                 break;
         }
 

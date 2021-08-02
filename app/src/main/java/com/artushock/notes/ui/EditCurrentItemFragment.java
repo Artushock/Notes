@@ -27,14 +27,13 @@ public class EditCurrentItemFragment extends Fragment {
     private String editedNoteDescription;
     private String editedNoteContent;
     private String editedCreationDate;
-    private long editedLongDate;
 
     private TextInputEditText editNoteCaptureInputText;
     private TextInputEditText editNoteDescriptionInputText;
     private TextInputEditText editNoteDateInputText;
     private TextInputEditText editNoteContentInputText;
 
-    long date;
+    private long date;
 
     public EditCurrentItemFragment(Note note) {
         this.editedNote = note;
@@ -48,7 +47,6 @@ public class EditCurrentItemFragment extends Fragment {
         editedNoteDescription = editedNote.getNoteDescription();
         editedNoteContent = editedNote.getNoteContent();
         editedCreationDate = editedNote.getCreationDateFormatted();
-        editedLongDate = editedNote.getCreationDate();
 
         getParentFragmentManager().setFragmentResultListener("requestForAddNoteDate", this, new FragmentResultListener() {
             @Override
