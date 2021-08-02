@@ -5,4 +5,27 @@
     <string name="back_button_str">Назад</string>
     <string name="add_button_str">Добавить</string>
     <string name="fab_content_desc">Добавить заметку</string>
+    <string name="add_note_str">Добавить заметку</string>
+    <string name="note_capture_str">Названеи заметки</string>
+    <string name="note_description_str">Описание</string>
+    <string name="note_date_str">Дата</string>
+    <string name="note_content_str">Содержание</string>
+    <string name="add_note_button_str">Добавить</string>
+    <string name="cancel_note_button_str">Отмена</string>
+    <string name="settings_menu_str">Настройки</string>
+    <string name="add_note_menu_str">Добавить заметку</string>
+    <string name="about_app_str">О приложении</string>
+    <string name="edit_note_menu_str">Редактировать</string>
+    <string name="save_str">Сохранить</string>
+    <string name="nav_header_title">Artiom Ponomariov</string>
+    <string name="nav_header_subtitle">Home work 7</string>
+    <string name="app_name_version_str">Notes v.0.0.0.</string>
+    <string name="app_author_str">Author: Ponomariov Artiom</string>
+    <string name="app_part_developing_str">The part is developing</string>
+    <string name="edit_note_str">Редактировать заметку</string>
+    <string name="delete_context_menu_str">Удалить</string>
+    <string name="edit_context_menu_str">Редактировать</string>
+    <string name="save_note_button_str">Сохранить</string>
+    <string name="clear_all_note_menu_str">Очистить</string>
+    <string name="exit_nav_menu_str">Выход</string>
 </resources>
