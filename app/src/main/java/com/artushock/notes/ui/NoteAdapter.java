@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.appcompat.widget.AppCompatImageView;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.artushock.notes.R;
@@ -20,11 +21,18 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
     private final NoteSource dataSource;
     private OnItemClickListener itemClickListener;
     private OnEditClickListener editClickListener;
+    private Fragment fragment;
+    private int menuCurrentPosition;
+
+    public int getMenuCurrentPosition() {
+        return menuCurrentPosition;
+    }
 
     private OnCheckedChangeListener checkedChangeListener;
 
-    public NoteAdapter(NoteSource dataSource) {
+    public NoteAdapter(NoteSource dataSource, Fragment fragment) {
         this.dataSource = dataSource;
+        this.fragment = fragment;
     }
 
     @NonNull
@@ -37,7 +45,6 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull NoteAdapter.ViewHolder holder, int position) {
         holder.setData(dataSource.getNoteData(position));
-
     }
 
     @Override
@@ -84,10 +91,21 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
             dateItemNote = itemView.findViewById(R.id.item_date);
             itemEditImage = itemView.findViewById(R.id.item_edit_image);
             itemCheckBox = itemView.findViewById(R.id.item_checkbox);
+            
+            registerContextMenu(itemView);
 
             itemView.setOnClickListener(v -> {
                 if(itemClickListener != null){
                     itemClickListener.onItemClick(v, getAdapterPosition());
+                }
+            });
+
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    menuCurrentPosition = getLayoutPosition();
+                    v.showContextMenu();
+                    return true;
                 }
             });
 
@@ -102,6 +120,13 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
                     checkedChangeListener.OnCheckedChange(buttonView, getAdapterPosition(), isChecked);
                 }
             });
+
+        }
+
+        private void registerContextMenu(View itemView) {
+            if(itemView != null){
+                fragment.registerForContextMenu(itemView);
+            }
         }
 
         public void setData(Note note) {

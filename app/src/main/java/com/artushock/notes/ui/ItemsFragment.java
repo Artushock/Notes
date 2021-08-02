@@ -2,7 +2,10 @@ package com.artushock.notes.ui;
 
 
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -78,7 +81,7 @@ public class ItemsFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
 
-        noteAdapter = new NoteAdapter(noteSource);
+        noteAdapter = new NoteAdapter(noteSource, this);
         recyclerView.setAdapter(noteAdapter);
 
         noteAdapter.setItemClickListener((view, position) -> addFragment(new AddNoteFragment()));
@@ -118,5 +121,31 @@ public class ItemsFragment extends Fragment {
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 
         fragmentTransaction.commit();
+    }
+
+    @Override
+    public void onCreateContextMenu(@NonNull @NotNull ContextMenu menu, @NonNull @NotNull View v, @Nullable @org.jetbrains.annotations.Nullable ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = requireActivity().getMenuInflater();
+        inflater.inflate(R.menu.note_context_menu, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull @NotNull MenuItem item) {
+
+        int id = item.getItemId();
+        currentPosition = noteAdapter.getMenuCurrentPosition();
+
+        switch (id){
+            case R.id.edit_context_menu:
+                addFragment(new EditCurrentItemFragment(noteSource.getNoteData(currentPosition)));
+                return true;
+            case R.id.delete_context_menu:
+                noteSource.deleteNote(currentPosition);
+                noteAdapter.notifyDataSetChanged();
+                return true;
+        }
+
+        return super.onContextItemSelected(item);
     }
 }

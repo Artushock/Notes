@@ -23,4 +23,6 @@
     <string name="app_author_str">Author: Ponomariov Artiom</string>
     <string name="app_part_developing_str">The part is developing</string>
     <string name="edit_note_str">Редактировать заметку</string>
+    <string name="delete_context_menu_str">Удалить</string>
+    <string name="edit_context_menu_str">Редактировать</string>
 </resources>
