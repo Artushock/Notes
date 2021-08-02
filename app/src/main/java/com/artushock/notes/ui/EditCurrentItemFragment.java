@@ -26,6 +26,8 @@ public class EditCurrentItemFragment extends Fragment {
     private TextInputEditText editNoteDateInputText;
     private TextInputEditText editNoteContentInputText;
 
+
+
     public EditCurrentItemFragment(Note note) {
         this.editedNote = note;
     }
@@ -71,9 +73,16 @@ public class EditCurrentItemFragment extends Fragment {
                     editedNoteContent);
 
             Bundle result = new Bundle();
-            result.putParcelable("bundleKey", note);
-            getParentFragmentManager().setFragmentResult("requestKey", result);
-            getChildFragmentManager();
+            result.putParcelable("editCurrentNote", note);
+            getParentFragmentManager().setFragmentResult("requestForEditedNote", result);
+            getParentFragmentManager().popBackStack();
+        });
+
+        cancelEditNoteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                requireActivity().getSupportFragmentManager().popBackStack();
+            }
         });
     }
 

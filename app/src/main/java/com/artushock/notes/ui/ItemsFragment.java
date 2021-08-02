@@ -26,6 +26,9 @@ import org.jetbrains.annotations.NotNull;
 
 public class ItemsFragment extends Fragment {
     private NoteSource noteSource;
+    private RecyclerView recyclerView;
+    private NoteAdapter noteAdapter;
+    int currentPosition = -1;
 
     public ItemsFragment() {
     }
@@ -46,10 +49,13 @@ public class ItemsFragment extends Fragment {
             }
         });
 
-        getParentFragmentManager().setFragmentResultListener("requestForEditingCurrentNote", this, new FragmentResultListener() {
+        getParentFragmentManager().setFragmentResultListener("requestForEditedNote", this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull @NotNull String requestKey, @NonNull @NotNull Bundle result) {
-
+                Note editedNote = result.getParcelable("editCurrentNote");
+                noteSource.setNote(editedNote, currentPosition);
+                noteAdapter.notifyItemChanged(currentPosition);
+                recyclerView.scrollToPosition(currentPosition);
             }
         });
 
@@ -60,7 +66,7 @@ public class ItemsFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_note_items, container, false);
-        RecyclerView recyclerView = view.findViewById(R.id.recycler_view_list);
+        recyclerView = view.findViewById(R.id.recycler_view_list);
         noteSource = (NoteSource) getArguments().getSerializable(MainActivity.NOTE_SOURCE_KEY);
         initRecyclerView(recyclerView, noteSource);
         return view;
@@ -72,7 +78,7 @@ public class ItemsFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
 
-        NoteAdapter noteAdapter = new NoteAdapter(noteSource);
+        noteAdapter = new NoteAdapter(noteSource);
         recyclerView.setAdapter(noteAdapter);
 
         noteAdapter.setItemClickListener((view, position) -> addFragment(new AddNoteFragment()));
@@ -80,13 +86,7 @@ public class ItemsFragment extends Fragment {
         noteAdapter.setEditClickListener(new NoteAdapter.OnEditClickListener() {
             @Override
             public void onEditClick(View view, int position) {
-                getParentFragmentManager().setFragmentResultListener("editRequest", getViewLifecycleOwner(), new FragmentResultListener() {
-                    @Override
-                    public void onFragmentResult(@NonNull @NotNull String requestKey, @NonNull @NotNull Bundle result) {
-                        Note note = result.getParcelable("bundleKey");
-                        noteSource.setNote(note, position);
-                    }
-                });
+                currentPosition = position;
                 addFragment(new EditCurrentItemFragment(noteSource.getNoteData(position)));
             }
         });

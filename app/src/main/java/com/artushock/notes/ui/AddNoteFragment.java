@@ -10,7 +10,6 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.artushock.notes.MainActivity;
 import com.artushock.notes.R;
 import com.artushock.notes.data.Note;
 import com.google.android.material.textfield.TextInputEditText;
@@ -55,8 +54,6 @@ public class AddNoteFragment extends Fragment {
 
         cancelNoteButton = view.findViewById(R.id.cancel_edit_note_button);
         cancelNoteButton.setOnClickListener(this::cancelNoteButtonHandling);
-
-
     }
 
     private void noteDateInputTextHandling(View v) {
@@ -68,7 +65,6 @@ public class AddNoteFragment extends Fragment {
     }
 
     private void addNoteButtonHandling(View v) {
-
 
         Note newNote = new Note(
                 noteCaptureInputText.getText().toString(),
