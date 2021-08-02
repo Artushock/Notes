@@ -84,7 +84,13 @@ public class ItemsFragment extends Fragment {
         noteAdapter = new NoteAdapter(noteSource, this);
         recyclerView.setAdapter(noteAdapter);
 
-        noteAdapter.setItemClickListener((view, position) -> addFragment(new AddNoteFragment()));
+        noteAdapter.setItemClickListener((view, position) -> {
+            Bundle bundle = new Bundle();
+            bundle.putParcelable(NoteFragment.ARG_NOTE, noteSource.getNoteData(position));
+            Fragment noteFragment = new NoteFragment(position);
+            noteFragment.setArguments(bundle);
+            addFragment(noteFragment);
+        });
 
         noteAdapter.setEditClickListener(new NoteAdapter.OnEditClickListener() {
             @Override
@@ -116,7 +122,7 @@ public class ItemsFragment extends Fragment {
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.addToBackStack("main_screen");
         fragmentTransaction.replace(R.id.fragment_container, fragment);
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 
