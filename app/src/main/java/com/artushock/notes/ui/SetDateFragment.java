@@ -1,24 +1,19 @@
 package com.artushock.notes.ui;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.Toast;
+
+import androidx.fragment.app.Fragment;
 
 import com.artushock.notes.R;
 
 import java.util.Calendar;
 
 public class SetDateFragment extends Fragment {
-
-    private Button saveDateButton;
-    private DatePicker datePicker;
 
     public SetDateFragment() {
     }
@@ -34,20 +29,20 @@ public class SetDateFragment extends Fragment {
     }
 
     private void initView(View view) {
-        datePicker = view.findViewById(R.id.set_date_date_picker);
-        saveDateButton = view.findViewById(R.id.save_date_btn);
-        saveDateButton.setOnClickListener(this::saveDateButtonHandling);
+        DatePicker datePicker = view.findViewById(R.id.set_date_date_picker);
+        Button saveDateButton = view.findViewById(R.id.save_date_btn);
+        saveDateButton.setOnClickListener(v -> saveDateButtonHandling(datePicker));
     }
 
-    private void saveDateButtonHandling(View v) {
+    private void saveDateButtonHandling(DatePicker datePicker) {
         getParentFragmentManager().popBackStack();
 
         Calendar calendar = Calendar.getInstance();
         calendar.set(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth());
 
         Bundle result = new Bundle();
-        result.putLong("addNoteDate", calendar.getTimeInMillis());
-        getParentFragmentManager().setFragmentResult("requestForAddNoteDate", result);
+        result.putLong(AddNoteFragment.KEY_ADD_NEW_NOTE, calendar.getTimeInMillis());
+        getParentFragmentManager().setFragmentResult(AddNoteFragment.REQUEST_KEY_FOR_ADDING_NOTE, result);
         getParentFragmentManager().popBackStack();
     }
 }

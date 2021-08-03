@@ -1,50 +1,40 @@
 package com.artushock.notes.ui;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentResultListener;
 
 import com.artushock.notes.R;
 import com.artushock.notes.data.Note;
 import com.google.android.material.textfield.TextInputEditText;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
+import java.util.Objects;
 
 public class AddNoteFragment extends Fragment {
 
+    public static final String REQUEST_KEY_FOR_ADDING_NOTE = "requestKeyForAddingNote";
+    public static final String KEY_ADD_NEW_NOTE = "addNewNote";
     private TextInputEditText noteCaptureInputText;
     private TextInputEditText noteDescriptionInputText;
     private TextInputEditText noteDateInputText;
     private TextInputEditText noteContentInputText;
-
     long date;
-
-    private Button addNoteButton;
-    private Button cancelNoteButton;
 
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        getParentFragmentManager().setFragmentResultListener("requestForAddNoteDate", this, new FragmentResultListener() {
-            @Override
-            public void onFragmentResult(@NonNull @NotNull String requestKey, @NonNull @NotNull Bundle result) {
-                date = result.getLong("addNoteDate");
-            }
-        });
+        getParentFragmentManager().setFragmentResultListener("requestForAddNoteDate", this, (requestKey, result) -> date = result.getLong("addNoteDate"));
 
         if (date == 0) {
             date = new Date().getTime();
@@ -59,7 +49,7 @@ public class AddNoteFragment extends Fragment {
 
     private void setDateText() {
         String pattern = "dd.MM.yyyy";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, Locale.getDefault());
         noteDateInputText.setText(simpleDateFormat.format(date));
     }
 
@@ -69,61 +59,59 @@ public class AddNoteFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_edit_new, container, false);
         initView(view);
-
         return view;
     }
 
     private void initView(View view) {
+        initTextInputEditTexts(view);
+
+        initButtons(view);
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private void initTextInputEditTexts(View view) {
         noteCaptureInputText = view.findViewById(R.id.edit_note_capture_input_edit_text);
         noteDescriptionInputText = view.findViewById(R.id.edit_note_description_input_edit_text);
-
         noteDateInputText = view.findViewById(R.id.edit_note_date_input_edit_text);
-
         setDateText();
 
-        noteDateInputText.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                noteDateInputTextHandling(v);
-                return true;
-            }
+        noteDateInputText.setOnTouchListener((v, event) -> {
+            noteDateInputTextHandling();
+            return true;
         });
-
         noteContentInputText = view.findViewById(R.id.edit_note_content_input_edit_text);
+    }
 
-        addNoteButton = view.findViewById(R.id.edit_note_button);
+    private void initButtons(View view) {
+        Button addNoteButton = view.findViewById(R.id.edit_note_button);
         addNoteButton.setOnClickListener(this::addNoteButtonHandling);
 
-        cancelNoteButton = view.findViewById(R.id.cancel_edit_note_button);
+        Button cancelNoteButton = view.findViewById(R.id.cancel_edit_note_button);
         cancelNoteButton.setOnClickListener(this::cancelNoteButtonHandling);
     }
 
-    private void noteDateInputTextHandling(View v) {
-        getParentFragmentManager()
-                .beginTransaction()
-                .addToBackStack(null)
-                .replace(R.id.fragment_container, new SetDateFragment())
-                .commit();
+    private void addNoteButtonHandling(View v) {
+        String capture = Objects.requireNonNull(noteCaptureInputText.getText()).toString();
+        String description = Objects.requireNonNull(noteDescriptionInputText.getText()).toString();
+        String content = Objects.requireNonNull(noteContentInputText.getText()).toString();
+
+        Note newNote = new Note(capture, description, date, content);
+
+        Bundle result = new Bundle();
+        result.putParcelable(KEY_ADD_NEW_NOTE, newNote);
+        getParentFragmentManager().setFragmentResult(REQUEST_KEY_FOR_ADDING_NOTE, result);
+        getParentFragmentManager().popBackStack();
     }
 
     private void cancelNoteButtonHandling(View v) {
         getParentFragmentManager().popBackStack();
     }
 
-    private void addNoteButtonHandling(View v) {
-
-        Note newNote = new Note(
-                noteCaptureInputText.getText().toString(),
-                noteDescriptionInputText.getText().toString(),
-                date,
-                noteContentInputText.getText().toString()
-        );
-
-        Bundle result = new Bundle();
-        result.putParcelable("addNewNote", newNote);
-        getParentFragmentManager().setFragmentResult("requestForAddingNote", result);
-        getParentFragmentManager().popBackStack();
-
-        Toast.makeText(getContext(), "From addNoteButtonHandling()", Toast.LENGTH_SHORT).show();
+    private void noteDateInputTextHandling() {
+        getParentFragmentManager()
+                .beginTransaction()
+                .addToBackStack(null)
+                .replace(R.id.fragment_container, new SetDateFragment())
+                .commit();
     }
 }

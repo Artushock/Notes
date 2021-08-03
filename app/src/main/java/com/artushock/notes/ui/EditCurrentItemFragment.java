@@ -1,5 +1,6 @@
 package com.artushock.notes.ui;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -19,6 +20,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
 
 public class EditCurrentItemFragment extends Fragment {
     private Note editedNote;
@@ -75,7 +77,6 @@ public class EditCurrentItemFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_edit_current_note, container, false);
 
         initView(view);
@@ -93,8 +94,8 @@ public class EditCurrentItemFragment extends Fragment {
         Button cancelEditNoteButton = view.findViewById(R.id.cancel_edit_note_button);
 
         editNoteButton.setOnClickListener(v -> {
-            readFields();
 
+            readFields();
             Note note = new Note(
                     editedNoteCapture,
                     editedNoteDescription,
@@ -102,8 +103,8 @@ public class EditCurrentItemFragment extends Fragment {
                     editedNoteContent);
 
             Bundle result = new Bundle();
-            result.putParcelable("editCurrentNote", note);
-            getParentFragmentManager().setFragmentResult("requestForEditedNote", result);
+            result.putParcelable(ItemsFragment.KEY_EDIT_CURRENT_NOTE, note);
+            getParentFragmentManager().setFragmentResult(ItemsFragment.REQUEST_KEY_FOR_EDITED_NOTE, result);
             getParentFragmentManager().popBackStack();
         });
 
@@ -116,21 +117,19 @@ public class EditCurrentItemFragment extends Fragment {
     }
 
     private void readFields() {
-        editedNoteCapture = editNoteCaptureInputText.getText().toString();
-        editedNoteDescription = editNoteDescriptionInputText.getText().toString();
-        editedNoteContent = editNoteContentInputText.getText().toString();
+        editedNoteCapture = Objects.requireNonNull(editNoteCaptureInputText.getText()).toString();
+        editedNoteDescription = Objects.requireNonNull(editNoteDescriptionInputText.getText()).toString();
+        editedNoteContent = Objects.requireNonNull(editNoteContentInputText.getText()).toString();
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void initInputEditTextViews(View view) {
         editNoteCaptureInputText = view.findViewById(R.id.edit_note_capture_input_edit_text);
         editNoteDescriptionInputText = view.findViewById(R.id.edit_note_description_input_edit_text);
         editNoteDateInputText = view.findViewById(R.id.edit_note_date_input_edit_text);
-        editNoteDateInputText.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                noteDateInputTextHandling(v);
-                return false;
-            }
+        editNoteDateInputText.setOnTouchListener((v, event) -> {
+            noteDateInputTextHandling();
+            return false;
         });
 
         editNoteContentInputText = view.findViewById(R.id.edit_note_content_input_edit_text);
@@ -141,7 +140,7 @@ public class EditCurrentItemFragment extends Fragment {
         editNoteContentInputText.setText(editedNoteContent);
     }
 
-    private void noteDateInputTextHandling(View v) {
+    private void noteDateInputTextHandling() {
         getParentFragmentManager()
                 .beginTransaction()
                 .addToBackStack(null)

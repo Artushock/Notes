@@ -3,12 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    tools:context=".ui.SetDateFragment">
+    tools:context=".ui.SetDateFragment"
+    android:padding="16dp">
 
     <DatePicker
         android:id="@+id/set_date_date_picker"
-        android:layout_width="wrap_content"
+        android:datePickerMode="spinner"
+        android:calendarViewShown="false"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"/>
 

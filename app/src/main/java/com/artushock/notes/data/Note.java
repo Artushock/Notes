@@ -48,10 +48,6 @@ public class Note implements Parcelable {
         this.creationDate = date;
     }
 
-    public Note(String noteCapture, String noteDescription, String noteContent) {
-        new Note(noteCapture, noteDescription, new Date().getTime(), noteContent);
-    }
-
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(noteCapture);

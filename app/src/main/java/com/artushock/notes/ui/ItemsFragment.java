@@ -29,10 +29,17 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import org.jetbrains.annotations.NotNull;
 
 public class ItemsFragment extends Fragment {
+    public static final String REQUEST_KEY_FOR_ADDING_NOTE = "requestForAddingNote";
+    public static final String KEY_ADD_NEW_NOTE = "addNewNote";
+    public static final String REQUEST_KEY_FOR_EDITED_NOTE = "requestForEditedNote";
+    public static final String KEY_EDIT_CURRENT_NOTE = "editCurrentNote";
+    public static final int NO_POISITION_VALUE = -1;
+
+
     private NoteSource noteSource;
     private RecyclerView recyclerView;
     private NoteAdapter noteAdapter;
-    int currentPosition = -1;
+    int currentPosition = NO_POISITION_VALUE;
 
     public ItemsFragment() {
     }
@@ -45,18 +52,18 @@ public class ItemsFragment extends Fragment {
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        getParentFragmentManager().setFragmentResultListener("requestForAddingNote", this, new FragmentResultListener() {
+        getParentFragmentManager().setFragmentResultListener(REQUEST_KEY_FOR_ADDING_NOTE, this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull @NotNull String requestKey, @NonNull @NotNull Bundle result) {
-                Note newNote = result.getParcelable("addNewNote");
+                Note newNote = result.getParcelable(KEY_ADD_NEW_NOTE);
                 noteSource.addNote(newNote);
             }
         });
 
-        getParentFragmentManager().setFragmentResultListener("requestForEditedNote", this, new FragmentResultListener() {
+        getParentFragmentManager().setFragmentResultListener(REQUEST_KEY_FOR_EDITED_NOTE, this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull @NotNull String requestKey, @NonNull @NotNull Bundle result) {
-                Note editedNote = result.getParcelable("editCurrentNote");
+                Note editedNote = result.getParcelable(KEY_EDIT_CURRENT_NOTE);
                 noteSource.setNote(editedNote, currentPosition);
                 noteAdapter.notifyItemChanged(currentPosition);
                 recyclerView.scrollToPosition(currentPosition);
@@ -71,7 +78,7 @@ public class ItemsFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_note_items, container, false);
         recyclerView = view.findViewById(R.id.recycler_view_list);
-        noteSource = (NoteSource) getArguments().getSerializable(NoteActivity.NOTE_SOURCE_KEY);
+        noteSource = NoteSourceImpl.getInstance();
         initRecyclerView(recyclerView, noteSource);
         return view;
     }
