@@ -125,7 +125,7 @@ public class NoteActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-    private void addFragment(Fragment fragment) {
+    public void addFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 

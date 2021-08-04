@@ -2,18 +2,12 @@ package com.artushock.notes.ui;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentResultListener;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.artushock.notes.data.Note;
@@ -21,20 +15,16 @@ import com.artushock.notes.R;
 import com.artushock.notes.data.NoteSourceImpl;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import org.jetbrains.annotations.NotNull;
-
-
 public class NoteFragment extends Fragment {
 
     public static final String ARG_NOTE = "ARG_NOTE";
     private Note note;
-    private int currentPosition;
+    private final int currentPosition;
 
     private TextView captureNote;
     private TextView descriptionNote;
     private TextView dateNote;
     private TextView contentNote;
-    private FloatingActionButton editFab;
 
     public NoteFragment(int position) {
         this.currentPosition = position;
@@ -48,15 +38,12 @@ public class NoteFragment extends Fragment {
             note = getArguments().getParcelable(ARG_NOTE);
         }
 
-        getParentFragmentManager().setFragmentResultListener("requestForEditedNote", this, new FragmentResultListener() {
-            @Override
-            public void onFragmentResult(@NonNull @NotNull String requestKey, @NonNull @NotNull Bundle result) {
-                Note editedNote = result.getParcelable("editCurrentNote");
-                NoteSourceImpl noteSource = NoteSourceImpl.getInstance();
-                noteSource.setNote(editedNote, currentPosition);
-                note = editedNote;
-                initView(getView());
-            }
+        getParentFragmentManager().setFragmentResultListener("requestForEditedNote", this, (requestKey, result) -> {
+            Note editedNote = result.getParcelable("editCurrentNote");
+            NoteSourceImpl noteSource = NoteSourceImpl.getInstance();
+            noteSource.setNote(editedNote, currentPosition);
+            note = editedNote;
+            initView(getView());
         });
     }
 
@@ -89,16 +76,11 @@ public class NoteFragment extends Fragment {
         dateNote = view.findViewById(R.id.note_date);
         contentNote = view.findViewById(R.id.note_content);
 
-        editFab = view.findViewById(R.id.edit_fab);
-        editFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                editNoteFabHandling(v);
-            }
-        });
+        FloatingActionButton editFab = view.findViewById(R.id.edit_fab);
+        editFab.setOnClickListener(v -> editNoteFabHandling());
     }
 
-    private void editNoteFabHandling(View v) {
+    private void editNoteFabHandling() {
         Note currentNote = NoteSourceImpl.getInstance().getNoteData(currentPosition);
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

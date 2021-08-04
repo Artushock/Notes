@@ -4,13 +4,13 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.Locale;
 
 public class Note implements Parcelable {
-    private String noteCapture;
-    private String noteDescription;
-    private String noteContent;
-    private long creationDate;
+    private final String noteCapture;
+    private final String noteDescription;
+    private final String noteContent;
+    private final long creationDate;
 
     public Note(Parcel in) {
         noteCapture = in.readString();
@@ -31,13 +31,9 @@ public class Note implements Parcelable {
         return noteContent;
     }
 
-    public long getCreationDate() {
-        return creationDate;
-    }
-
     public String getCreationDateFormatted() {
         String pattern = "dd.MM.yyyy";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, Locale.getDefault());
         return simpleDateFormat.format(creationDate);
     }
 

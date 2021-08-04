@@ -1,6 +1,7 @@
 package com.artushock.notes.ui;
 
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -13,9 +14,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentResultListener;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -33,13 +31,14 @@ public class ItemsFragment extends Fragment {
     public static final String KEY_ADD_NEW_NOTE = "addNewNote";
     public static final String REQUEST_KEY_FOR_EDITED_NOTE = "requestForEditedNote";
     public static final String KEY_EDIT_CURRENT_NOTE = "editCurrentNote";
-    public static final int NO_POISITION_VALUE = -1;
+    public static final int NO_POSITION_VALUE = -1;
 
 
     private NoteSource noteSource;
     private RecyclerView recyclerView;
     private NoteAdapter noteAdapter;
-    int currentPosition = NO_POISITION_VALUE;
+    int currentPosition = NO_POSITION_VALUE;
+    private NoteActivity activity;
 
     public ItemsFragment() {
     }
@@ -51,23 +50,18 @@ public class ItemsFragment extends Fragment {
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        activity = (NoteActivity)getActivity();
 
-        getParentFragmentManager().setFragmentResultListener(REQUEST_KEY_FOR_ADDING_NOTE, this, new FragmentResultListener() {
-            @Override
-            public void onFragmentResult(@NonNull @NotNull String requestKey, @NonNull @NotNull Bundle result) {
-                Note newNote = result.getParcelable(KEY_ADD_NEW_NOTE);
-                noteSource.addNote(newNote);
-            }
+        getParentFragmentManager().setFragmentResultListener(REQUEST_KEY_FOR_ADDING_NOTE, this, (requestKey, result) -> {
+            Note newNote = result.getParcelable(KEY_ADD_NEW_NOTE);
+            noteSource.addNote(newNote);
         });
 
-        getParentFragmentManager().setFragmentResultListener(REQUEST_KEY_FOR_EDITED_NOTE, this, new FragmentResultListener() {
-            @Override
-            public void onFragmentResult(@NonNull @NotNull String requestKey, @NonNull @NotNull Bundle result) {
-                Note editedNote = result.getParcelable(KEY_EDIT_CURRENT_NOTE);
-                noteSource.setNote(editedNote, currentPosition);
-                noteAdapter.notifyItemChanged(currentPosition);
-                recyclerView.scrollToPosition(currentPosition);
-            }
+        getParentFragmentManager().setFragmentResultListener(REQUEST_KEY_FOR_EDITED_NOTE, this, (requestKey, result) -> {
+            Note editedNote = result.getParcelable(KEY_EDIT_CURRENT_NOTE);
+            noteSource.setNote(editedNote, currentPosition);
+            noteAdapter.notifyItemChanged(currentPosition);
+            recyclerView.scrollToPosition(currentPosition);
         });
 
     }
@@ -97,15 +91,12 @@ public class ItemsFragment extends Fragment {
             bundle.putParcelable(NoteFragment.ARG_NOTE, noteSource.getNoteData(position));
             Fragment noteFragment = new NoteFragment(position);
             noteFragment.setArguments(bundle);
-            addFragment(noteFragment);
+            activity.addFragment(noteFragment);
         });
 
-        noteAdapter.setEditClickListener(new NoteAdapter.OnEditClickListener() {
-            @Override
-            public void onEditClick(View view, int position) {
-                currentPosition = position;
-                addFragment(new EditCurrentItemFragment(noteSource.getNoteData(position)));
-            }
+        noteAdapter.setEditClickListener((view, position) -> {
+            currentPosition = position;
+            activity.addFragment(new EditCurrentItemFragment(noteSource.getNoteData(position)));
         });
 
         noteAdapter.setCheckedChangeListener((view, position, isChecked) -> Toast.makeText(getContext(), "checkBox is " + isChecked, Toast.LENGTH_SHORT).show());
@@ -123,18 +114,7 @@ public class ItemsFragment extends Fragment {
 
     private void initAddButton(View view) {
         FloatingActionButton addFab = view.findViewById(R.id.add_fab);
-        addFab.setOnClickListener(v -> addFragment(new AddNoteFragment()));
-    }
-
-    private void addFragment(Fragment fragment) {
-        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-        fragmentTransaction.addToBackStack("main_screen");
-        fragmentTransaction.replace(R.id.fragment_container, fragment);
-        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-
-        fragmentTransaction.commit();
+        addFab.setOnClickListener(v -> activity.addFragment(new AddNoteFragment()));
     }
 
     @Override
@@ -144,15 +124,15 @@ public class ItemsFragment extends Fragment {
         inflater.inflate(R.menu.note_context_menu, menu);
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onContextItemSelected(@NonNull @NotNull MenuItem item) {
-
         int id = item.getItemId();
         currentPosition = noteAdapter.getMenuCurrentPosition();
 
         switch (id){
             case R.id.edit_context_menu:
-                addFragment(new EditCurrentItemFragment(NoteSourceImpl.getInstance().getNoteData(currentPosition)));
+                activity.addFragment(new EditCurrentItemFragment(NoteSourceImpl.getInstance().getNoteData(currentPosition)));
                 return true;
             case R.id.delete_context_menu:
                 noteSource.deleteNote(currentPosition);

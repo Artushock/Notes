@@ -10,6 +10,7 @@ import android.widget.Button;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.artushock.notes.NoteActivity;
 import com.artushock.notes.R;
 import com.artushock.notes.data.Note;
 import com.google.android.material.textfield.TextInputEditText;
@@ -20,21 +21,24 @@ import java.util.Locale;
 import java.util.Objects;
 
 public class AddNoteFragment extends Fragment {
-
-    public static final String REQUEST_KEY_FOR_ADDING_NOTE = "requestKeyForAddingNote";
-    public static final String KEY_ADD_NEW_NOTE = "addNewNote";
+    public static final String REQUEST_KEY_FOR_ADD_NOTE_DATE = "requestForAddNoteDate";
+    public static final String KEY_ADD_NOTE_DATE = "addNoteDate";
     private TextInputEditText noteCaptureInputText;
     private TextInputEditText noteDescriptionInputText;
     private TextInputEditText noteDateInputText;
     private TextInputEditText noteContentInputText;
     long date;
 
+    private NoteActivity activity;
+
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        getParentFragmentManager().setFragmentResultListener("requestForAddNoteDate", this, (requestKey, result) -> date = result.getLong("addNoteDate"));
+        activity = (NoteActivity) getActivity();
+
+        getParentFragmentManager().setFragmentResultListener(REQUEST_KEY_FOR_ADD_NOTE_DATE, this, (requestKey, result) -> date = result.getLong(KEY_ADD_NOTE_DATE));
 
         if (date == 0) {
             date = new Date().getTime();
@@ -76,7 +80,7 @@ public class AddNoteFragment extends Fragment {
         setDateText();
 
         noteDateInputText.setOnTouchListener((v, event) -> {
-            noteDateInputTextHandling();
+            activity.addFragment(new SetDateFragment());
             return true;
         });
         noteContentInputText = view.findViewById(R.id.edit_note_content_input_edit_text);
@@ -98,20 +102,12 @@ public class AddNoteFragment extends Fragment {
         Note newNote = new Note(capture, description, date, content);
 
         Bundle result = new Bundle();
-        result.putParcelable(KEY_ADD_NEW_NOTE, newNote);
-        getParentFragmentManager().setFragmentResult(REQUEST_KEY_FOR_ADDING_NOTE, result);
+        result.putParcelable(ItemsFragment.KEY_ADD_NEW_NOTE, newNote);
+        getParentFragmentManager().setFragmentResult(ItemsFragment.REQUEST_KEY_FOR_ADDING_NOTE, result);
         getParentFragmentManager().popBackStack();
     }
 
     private void cancelNoteButtonHandling(View v) {
         getParentFragmentManager().popBackStack();
-    }
-
-    private void noteDateInputTextHandling() {
-        getParentFragmentManager()
-                .beginTransaction()
-                .addToBackStack(null)
-                .replace(R.id.fragment_container, new SetDateFragment())
-                .commit();
     }
 }

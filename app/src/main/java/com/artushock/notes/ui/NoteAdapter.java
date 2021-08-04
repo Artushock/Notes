@@ -3,7 +3,6 @@ package com.artushock.notes.ui;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -21,7 +20,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
     private final NoteSource dataSource;
     private OnItemClickListener itemClickListener;
     private OnEditClickListener editClickListener;
-    private Fragment fragment;
+    private final Fragment fragment;
     private int menuCurrentPosition;
 
     public int getMenuCurrentPosition() {
@@ -100,13 +99,10 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
                 }
             });
 
-            itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    menuCurrentPosition = getLayoutPosition();
-                    v.showContextMenu();
-                    return true;
-                }
+            itemView.setOnLongClickListener(v -> {
+                menuCurrentPosition = getLayoutPosition();
+                v.showContextMenu();
+                return true;
             });
 
             itemEditImage.setOnClickListener(v -> {

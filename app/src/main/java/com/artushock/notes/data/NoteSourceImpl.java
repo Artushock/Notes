@@ -15,13 +15,12 @@ public class NoteSourceImpl implements NoteSource, Serializable {
         startInit();
     }
 
-    private NoteSourceImpl startInit() {
+    private void startInit() {
         notes.add(new Note("Стрижка", "Постричься", new Date().getTime(), "Постричься"));
         notes.add(new Note("Химчистка", "Заехать в химчистку", new Date().getTime(), "Завзти в химчистку шубу жены"));
         notes.add(new Note("Заправка", "Заправить машину", new Date().getTime(), "Заправить машину на все деньги"));
         notes.add(new Note("Собака", "Выгулять собаку", new Date().getTime(), "Выгулять собаку"));
         notes.add(new Note("Подарки", "Купить подарки", new Date().getTime(), "Купить подарки детям"));
-        return this;
     }
 
     public static NoteSourceImpl getInstance() {

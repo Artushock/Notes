@@ -35,14 +35,14 @@ public class SetDateFragment extends Fragment {
     }
 
     private void saveDateButtonHandling(DatePicker datePicker) {
-        getParentFragmentManager().popBackStack();
+        getParentFragmentManager().popBackStack(); //
 
         Calendar calendar = Calendar.getInstance();
         calendar.set(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth());
 
         Bundle result = new Bundle();
-        result.putLong(AddNoteFragment.KEY_ADD_NEW_NOTE, calendar.getTimeInMillis());
-        getParentFragmentManager().setFragmentResult(AddNoteFragment.REQUEST_KEY_FOR_ADDING_NOTE, result);
+        result.putLong(AddNoteFragment.KEY_ADD_NOTE_DATE, calendar.getTimeInMillis());
+        getParentFragmentManager().setFragmentResult(AddNoteFragment.REQUEST_KEY_FOR_ADD_NOTE_DATE, result);
         getParentFragmentManager().popBackStack();
     }
 }
