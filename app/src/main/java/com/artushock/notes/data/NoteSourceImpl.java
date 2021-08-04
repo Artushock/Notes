@@ -41,8 +41,13 @@ public class NoteSourceImpl implements NoteSource, Serializable {
     }
 
     @Override
-    public void deleteNote(int position) {
+    public void deleteNoteByPosition(int position) {
         notes.remove(position);
+    }
+
+    @Override
+    public void deleteNoteByObject(Note note) {
+        notes.remove(note);
     }
 
     @Override

@@ -26,6 +26,7 @@
     <string name="delete_context_menu_str">Удалить</string>
     <string name="edit_context_menu_str">Редактировать</string>
     <string name="save_note_button_str">Сохранить</string>
-    <string name="clear_all_note_menu_str">Очистить</string>
+    <string name="clear_all_note_menu_str">Очистить все</string>
     <string name="exit_nav_menu_str">Выход</string>
+    <string name="clear_selected_note_menu_str">Удалить выделенные</string>
 </resources>

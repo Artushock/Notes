@@ -9,7 +9,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -99,7 +98,13 @@ public class ItemsFragment extends Fragment {
             activity.addFragment(new EditCurrentItemFragment(noteSource.getNoteData(position)));
         });
 
-        noteAdapter.setCheckedChangeListener((view, position, isChecked) -> Toast.makeText(getContext(), "checkBox is " + isChecked, Toast.LENGTH_SHORT).show());
+        noteAdapter.setCheckedChangeListener((view, position, isChecked) -> {
+            if (isChecked){
+                activity.addSelectedPosition(position);
+            } else {
+                activity.removeSelectedPosition(position);
+            }
+        });
     }
 
     @Override
@@ -135,7 +140,7 @@ public class ItemsFragment extends Fragment {
                 activity.addFragment(new EditCurrentItemFragment(NoteSourceImpl.getInstance().getNoteData(currentPosition)));
                 return true;
             case R.id.delete_context_menu:
-                noteSource.deleteNote(currentPosition);
+                noteSource.deleteNoteByPosition(currentPosition);
                 noteAdapter.notifyDataSetChanged();
                 return true;
         }

@@ -24,12 +24,31 @@ import com.artushock.notes.ui.SettingsFragment;
 import com.google.android.material.navigation.NavigationView;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class NoteActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private NoteSource noteSource;
+    private List<Integer> selectedPositions;
     public static final String NOTE_SOURCE_KEY = "NOTE_SOURCE_KEY";
+
+    public void addSelectedPosition(Integer position) {
+        selectedPositions.add(position);
+    }
+
+    public void removeSelectedPosition(Integer position) {
+        selectedPositions.remove(position);
+    }
+
+    private void removeSelectedNotes() {
+        for (Integer position : selectedPositions) {
+            int i = position;
+            noteSource.deleteNoteByObject(noteSource.getNoteData(i));
+        }
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +96,8 @@ public class NoteActivity extends AppCompatActivity implements NavigationView.On
         ItemsFragment itemsFragment = ItemsFragment.newInstance();
         itemsFragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, itemsFragment).commit();
+
+        selectedPositions = new ArrayList<>();
     }
 
     @Override
@@ -94,6 +115,10 @@ public class NoteActivity extends AppCompatActivity implements NavigationView.On
                 return true;
             case R.id.clear_all_note_menu:
                 noteSource.clearNoteList();
+                initStartFragment(noteSource);
+                return true;
+            case R.id.clear_selected_note_menu:
+                removeSelectedNotes();
                 initStartFragment(noteSource);
                 return true;
             default:
