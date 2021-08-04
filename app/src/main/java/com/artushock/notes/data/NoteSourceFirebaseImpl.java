@@ -43,6 +43,7 @@ public class NoteSourceFirebaseImpl implements NoteSource, Serializable {
                         notes.add(note);
                     }
                     Log.d(TAG, "Succesful " + notes.size() + " got elements");
+                    response.initialized(NoteSourceFirebaseImpl.this);
                 } else {
                     Log.e(TAG,"Failed " + task.getException());
                 }
@@ -53,10 +54,6 @@ public class NoteSourceFirebaseImpl implements NoteSource, Serializable {
                 Log.e(TAG,"Failed " + e);
             }
         });
-
-        if (response != null) {
-            response.initialized(this);
-        }
 
         return this;
     }

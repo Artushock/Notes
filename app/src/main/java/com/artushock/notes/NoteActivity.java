@@ -91,7 +91,7 @@ public class NoteActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
     }
 
-    private void initStartFragment() {
+    public void initStartFragment() {
         Bundle bundle = new Bundle();
         bundle.putSerializable(NOTE_SOURCE_KEY, (Serializable) noteSource);
         ItemsFragment itemsFragment = ItemsFragment.newInstance();
