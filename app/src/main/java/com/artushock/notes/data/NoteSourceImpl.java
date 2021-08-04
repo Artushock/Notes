@@ -31,6 +31,18 @@ public class NoteSourceImpl implements NoteSource, Serializable {
     }
 
     @Override
+    public NoteSource init(NoteSourceResponse response) {
+        this.notes = new ArrayList<>();
+        startInit();
+
+        if (response != null) {
+            response.initialized(this);
+        }
+
+        return this;
+    }
+
+    @Override
     public Note getNoteData(int position) {
         return notes.get(position);
     }
@@ -48,11 +60,6 @@ public class NoteSourceImpl implements NoteSource, Serializable {
     @Override
     public void deleteNoteByObject(Note note) {
         notes.remove(note);
-    }
-
-    @Override
-    public void updateNote(Note note, int position) {
-        notes.set(position, note);
     }
 
     @Override

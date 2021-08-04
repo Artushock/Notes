@@ -3,20 +3,42 @@ package com.artushock.notes.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.firebase.firestore.Exclude;
+
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 public class Note implements Parcelable {
-    private final String noteCapture;
-    private final String noteDescription;
-    private final String noteContent;
-    private final long creationDate;
+    @Exclude
+    private String id;
+    private String noteCapture;
+    private String noteDescription;
+    private String noteContent;
+    private long creationDate;
+
+    public Note() {
+    }
+
+    public Note(String noteCapture, String noteDescription, long date, String noteContent) {
+        this.noteCapture = noteCapture;
+        this.noteDescription = noteDescription;
+        this.noteContent = noteContent;
+        this.creationDate = date;
+    }
 
     public Note(Parcel in) {
         noteCapture = in.readString();
         noteDescription = in.readString();
         noteContent = in.readString();
         creationDate = in.readLong();
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getNoteCapture() {
@@ -35,13 +57,6 @@ public class Note implements Parcelable {
         String pattern = "dd.MM.yyyy";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, Locale.getDefault());
         return simpleDateFormat.format(creationDate);
-    }
-
-    public Note(String noteCapture, String noteDescription, long date, String noteContent) {
-        this.noteCapture = noteCapture;
-        this.noteDescription = noteDescription;
-        this.noteContent = noteContent;
-        this.creationDate = date;
     }
 
     @Override

@@ -17,10 +17,10 @@ import com.artushock.notes.data.NoteSource;
 
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
 
-    private final NoteSource dataSource;
+    private final Fragment fragment;
+    private NoteSource dataSource;
     private OnItemClickListener itemClickListener;
     private OnEditClickListener editClickListener;
-    private final Fragment fragment;
     private int menuCurrentPosition;
 
     public int getMenuCurrentPosition() {
@@ -29,10 +29,15 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
 
     private OnCheckedChangeListener checkedChangeListener;
 
-    public NoteAdapter(NoteSource dataSource, Fragment fragment) {
-        this.dataSource = dataSource;
+    public NoteAdapter(Fragment fragment) {
         this.fragment = fragment;
     }
+
+    public void setDataSource(NoteSource dataSource) {
+        this.dataSource = dataSource;
+        notifyDataSetChanged();
+    }
+
 
     @NonNull
     @Override
@@ -56,7 +61,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
     }
 
     public interface OnItemClickListener {
-        void onItemClick(View view , int position);
+        void onItemClick(View view, int position);
     }
 
     public void setEditClickListener(OnEditClickListener editClickListener) {
@@ -64,15 +69,15 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
     }
 
     public interface OnEditClickListener {
-        void onEditClick(View view , int position);
+        void onEditClick(View view, int position);
     }
 
     public void setCheckedChangeListener(OnCheckedChangeListener checkedChangeListener) {
         this.checkedChangeListener = checkedChangeListener;
     }
 
-    public interface OnCheckedChangeListener{
-        void OnCheckedChange(View view , int position, boolean isChecked);
+    public interface OnCheckedChangeListener {
+        void OnCheckedChange(View view, int position, boolean isChecked);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -90,11 +95,11 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
             dateItemNote = itemView.findViewById(R.id.item_date);
             itemEditImage = itemView.findViewById(R.id.item_edit_image);
             itemCheckBox = itemView.findViewById(R.id.item_checkbox);
-            
+
             registerContextMenu(itemView);
 
             itemView.setOnClickListener(v -> {
-                if(itemClickListener != null){
+                if (itemClickListener != null) {
                     itemClickListener.onItemClick(v, getAdapterPosition());
                 }
             });
@@ -106,13 +111,13 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
             });
 
             itemEditImage.setOnClickListener(v -> {
-                if(editClickListener != null){
+                if (editClickListener != null) {
                     editClickListener.onEditClick(v, getAdapterPosition());
                 }
             });
 
             itemCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                if (checkedChangeListener != null){
+                if (checkedChangeListener != null) {
                     checkedChangeListener.OnCheckedChange(buttonView, getAdapterPosition(), isChecked);
                 }
             });
@@ -120,7 +125,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
         }
 
         private void registerContextMenu(View itemView) {
-            if(itemView != null){
+            if (itemView != null) {
                 fragment.registerForContextMenu(itemView);
             }
         }

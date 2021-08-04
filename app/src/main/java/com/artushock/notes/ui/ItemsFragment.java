@@ -20,7 +20,9 @@ import com.artushock.notes.NoteActivity;
 import com.artushock.notes.R;
 import com.artushock.notes.data.Note;
 import com.artushock.notes.data.NoteSource;
+import com.artushock.notes.data.NoteSourceFirebaseImpl;
 import com.artushock.notes.data.NoteSourceImpl;
+import com.artushock.notes.data.NoteSourceResponse;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.jetbrains.annotations.NotNull;
@@ -52,8 +54,8 @@ public class ItemsFragment extends Fragment {
         activity = (NoteActivity)getActivity();
 
         getParentFragmentManager().setFragmentResultListener(REQUEST_KEY_FOR_ADDING_NOTE, this, (requestKey, result) -> {
-            Note newNote = result.getParcelable(KEY_ADD_NEW_NOTE);
-            noteSource.addNote(newNote);
+            Note note = result.getParcelable(KEY_ADD_NEW_NOTE);
+            noteSource.addNote(note);
         });
 
         getParentFragmentManager().setFragmentResultListener(REQUEST_KEY_FOR_EDITED_NOTE, this, (requestKey, result) -> {
@@ -62,7 +64,10 @@ public class ItemsFragment extends Fragment {
             noteAdapter.notifyItemChanged(currentPosition);
             recyclerView.scrollToPosition(currentPosition);
         });
+    }
 
+    private void refreshFragment(){
+        activity.addFragment(new ItemsFragment());
     }
 
     @Override
@@ -70,9 +75,21 @@ public class ItemsFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_note_items, container, false);
+
         recyclerView = view.findViewById(R.id.recycler_view_list);
-        noteSource = NoteSourceImpl.getInstance();
         initRecyclerView(recyclerView, noteSource);
+
+        noteSource = (NoteSource) getArguments().getSerializable(NoteActivity.NOTE_SOURCE_KEY);
+
+        noteSource.init(new NoteSourceResponse() {
+            @Override
+            public void initialized(NoteSource noteSource) {
+                noteAdapter.notifyDataSetChanged();
+            }
+        });
+
+        noteAdapter.setDataSource(noteSource);
+
         return view;
     }
 
@@ -82,7 +99,7 @@ public class ItemsFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
 
-        noteAdapter = new NoteAdapter(noteSource, this);
+        noteAdapter = new NoteAdapter(this);
         recyclerView.setAdapter(noteAdapter);
 
         noteAdapter.setItemClickListener((view, position) -> {

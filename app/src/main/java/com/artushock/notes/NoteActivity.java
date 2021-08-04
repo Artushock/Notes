@@ -16,7 +16,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.artushock.notes.data.NoteSource;
-import com.artushock.notes.data.NoteSourceImpl;
+import com.artushock.notes.data.NoteSourceFirebaseImpl;
+import com.artushock.notes.data.NoteSourceResponse;
 import com.artushock.notes.ui.AboutAppFragment;
 import com.artushock.notes.ui.AddNoteFragment;
 import com.artushock.notes.ui.ItemsFragment;
@@ -29,10 +30,10 @@ import java.util.List;
 
 
 public class NoteActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+    public static final String NOTE_SOURCE_KEY = "NOTE_SOURCE_KEY";
 
     private NoteSource noteSource;
     private List<Integer> selectedPositions;
-    public static final String NOTE_SOURCE_KEY = "NOTE_SOURCE_KEY";
 
     public void addSelectedPosition(Integer position) {
         selectedPositions.add(position);
@@ -73,11 +74,11 @@ public class NoteActivity extends AppCompatActivity implements NavigationView.On
         initNoteSourceData();
         initToolbar();
         initNavigationMenu();
-        initStartFragment(noteSource);
+        initStartFragment();
     }
 
     private void initNoteSourceData() {
-        noteSource = NoteSourceImpl.getInstance();
+        noteSource = new NoteSourceFirebaseImpl();
     }
 
     private void initToolbar() {
@@ -90,7 +91,7 @@ public class NoteActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
     }
 
-    private void initStartFragment(NoteSource noteSource) {
+    private void initStartFragment() {
         Bundle bundle = new Bundle();
         bundle.putSerializable(NOTE_SOURCE_KEY, (Serializable) noteSource);
         ItemsFragment itemsFragment = ItemsFragment.newInstance();
@@ -115,11 +116,11 @@ public class NoteActivity extends AppCompatActivity implements NavigationView.On
                 return true;
             case R.id.clear_all_note_menu:
                 noteSource.clearNoteList();
-                initStartFragment(noteSource);
+                initStartFragment();
                 return true;
             case R.id.clear_selected_note_menu:
                 removeSelectedNotes();
-                initStartFragment(noteSource);
+                initStartFragment();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

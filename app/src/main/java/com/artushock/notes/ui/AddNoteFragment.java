@@ -19,6 +19,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.UUID;
 
 public class AddNoteFragment extends Fragment {
     public static final String REQUEST_KEY_FOR_ADD_NOTE_DATE = "requestForAddNoteDate";
@@ -100,6 +101,7 @@ public class AddNoteFragment extends Fragment {
         String content = Objects.requireNonNull(noteContentInputText.getText()).toString();
 
         Note newNote = new Note(capture, description, date, content);
+        newNote.setId(UUID.randomUUID().toString());
 
         Bundle result = new Bundle();
         result.putParcelable(ItemsFragment.KEY_ADD_NEW_NOTE, newNote);
