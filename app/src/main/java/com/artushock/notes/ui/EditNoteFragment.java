@@ -117,13 +117,10 @@ public class EditNoteFragment extends Fragment {
         editNoteDescriptionInputText = view.findViewById(R.id.edit_note_description_input_edit_text);
         dateTextView = view.findViewById(R.id.edit_date_text_view);
 
-        dateTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NoteActivity noteActivity = (NoteActivity) requireActivity();
-                Log.d(TAG, "date = " + date);
-                noteActivity.addFragment(SetDateFragment.newInstance(date));
-            }
+        dateTextView.setOnClickListener(v -> {
+            NoteActivity noteActivity = (NoteActivity) requireActivity();
+            Log.d(TAG, "date = " + date);
+            noteActivity.addFragment(SetDateFragment.newInstance(date));
         });
 
         editNoteContentInputText = view.findViewById(R.id.edit_note_content_input_edit_text);

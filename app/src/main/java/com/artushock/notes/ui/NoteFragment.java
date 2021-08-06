@@ -1,60 +1,94 @@
 package com.artushock.notes.ui;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
-import com.artushock.notes.data.Note;
+import com.artushock.notes.NoteActivity;
 import com.artushock.notes.R;
+import com.artushock.notes.data.Note;
 import com.artushock.notes.data.NoteSource;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.io.Serializable;
+
 public class NoteFragment extends Fragment {
 
-    public static final String ARG_NOTE_SOURCE = "ARG_NOTE_SOURCE";
+    public static final String TAG = "[Arts_NoteFragment]";
+
+    private static final String NOTE_FRAGMENT_NOTE_SOURCE_KEY = "NOTE_FRAGMENT_NOTE_SOURCE_KEY";
+    private static final String NOTE_FRAGMENT_POSITION_KEY = "NOTE_FRAGMENT_POSITION_KEY";
+
     private Note note;
-    NoteSource noteSource;
-    private final int currentPosition;
+    private NoteSource noteSource;
+    private int position;
+    NoteActivity activity;
 
     private TextView captureNote;
     private TextView descriptionNote;
     private TextView dateNote;
     private TextView contentNote;
 
-    public NoteFragment(int position) {
-        this.currentPosition = position;
+    public NoteFragment() {
     }
+
+    public static NoteFragment newInstance(NoteSource noteSource, int position) {
+        NoteFragment noteFragment = new NoteFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(NOTE_FRAGMENT_NOTE_SOURCE_KEY, (Serializable) noteSource);
+        bundle.putInt(NOTE_FRAGMENT_POSITION_KEY, position);
+        noteFragment.setArguments(bundle);
+        return noteFragment;
+    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        getParentFragmentManager().setFragmentResultListener(ItemsFragment.REQUEST_KEY_FOR_EDITED_NOTE_SOURCE, this, (requestKey, result) -> {
+            noteSource = (NoteSource) result.getSerializable(ItemsFragment.KEY_EDITED_NOTE_SOURCE);
+            note = noteSource.getNoteData(position);
+            Log.d(TAG, "Got new note");
+        });
+
+        activity = (NoteActivity) requireActivity();
+
         if (getArguments() != null) {
-            noteSource = (NoteSource) getArguments().getSerializable(ARG_NOTE_SOURCE);
-            note = noteSource.getNoteData(currentPosition);
+            noteSource = (NoteSource) getArguments().getSerializable(NOTE_FRAGMENT_NOTE_SOURCE_KEY);
+            position = getArguments().getInt(NOTE_FRAGMENT_POSITION_KEY);
+            if (note == null) {
+                note = noteSource.getNoteData(position);
+            }
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
         View view = inflater.inflate(R.layout.fragment_note, container, false);
         initView(view);
+        Log.d(TAG, "onCreateView");
         return view;
     }
 
     private void initView(View view) {
         initNoteViewFields(view);
-        if (note != null){
+        if (note != null) {
             fillFields();
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        fillFields();
     }
 
     private void fillFields() {
@@ -75,15 +109,6 @@ public class NoteFragment extends Fragment {
     }
 
     private void editNoteFabHandling() {
-        //Note currentNote = NoteSourceImpl.getInstance().getNoteData(currentPosition);
-
-
-
-        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.replace(R.id.fragment_container, new EditCurrentItemFragment(note));
-        fragmentTransaction.commit();
-
+        activity.addFragment(EditNoteFragment.newInstance(noteSource, position));
     }
 }

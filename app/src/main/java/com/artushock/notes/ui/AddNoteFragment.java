@@ -9,17 +9,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentResultListener;
 
 import com.artushock.notes.NoteActivity;
 import com.artushock.notes.R;
 import com.artushock.notes.data.Note;
 import com.google.android.material.textfield.TextInputEditText;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -45,12 +41,9 @@ public class AddNoteFragment extends Fragment {
 
         activity = (NoteActivity) getActivity();
 
-        getParentFragmentManager().setFragmentResultListener(SetDateFragment.REQUEST_KEY_FOR_EDITED_DATE, this, new FragmentResultListener() {
-            @Override
-            public void onFragmentResult(@NonNull @NotNull String requestKey, @NonNull @NotNull Bundle result) {
-                date = result.getLong(SetDateFragment.KEY_EDITED_DATE);
-                Log.d(TAG, "gotten new date = " + date);
-            }
+        getParentFragmentManager().setFragmentResultListener(SetDateFragment.REQUEST_KEY_FOR_EDITED_DATE, this, (requestKey, result) -> {
+            date = result.getLong(SetDateFragment.KEY_EDITED_DATE);
+            Log.d(TAG, "gotten new date = " + date);
         });
 
         if (date == 0){
@@ -91,12 +84,9 @@ public class AddNoteFragment extends Fragment {
         dateTextView = view.findViewById(R.id.date_text_view);
         setDateText();
 
-        dateTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "it listener date = " + date);
-                activity.addFragment(SetDateFragment.newInstance(date));
-            }
+        dateTextView.setOnClickListener(v -> {
+            Log.d(TAG, "it listener date = " + date);
+            activity.addFragment(SetDateFragment.newInstance(date));
         });
 
         noteContentInputText = view.findViewById(R.id.edit_note_content_input_edit_text);

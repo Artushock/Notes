@@ -17,7 +17,6 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.artushock.notes.data.NoteSource;
 import com.artushock.notes.data.NoteSourceFirebaseImpl;
-import com.artushock.notes.data.NoteSourceResponse;
 import com.artushock.notes.ui.AboutAppFragment;
 import com.artushock.notes.ui.AddNoteFragment;
 import com.artushock.notes.ui.ItemsFragment;
@@ -95,7 +94,6 @@ public class NoteActivity extends AppCompatActivity implements NavigationView.On
         ItemsFragment itemsFragment = ItemsFragment.newInstance(noteSource);
         getSupportFragmentManager()
                 .beginTransaction()
-                .addToBackStack(null)
                 .replace(R.id.fragment_container, itemsFragment)
                 .commit();
 

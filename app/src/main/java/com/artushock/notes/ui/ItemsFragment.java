@@ -132,10 +132,7 @@ public class ItemsFragment extends Fragment {
         noteAdapter = new NoteAdapter(this);
 
         noteAdapter.setItemClickListener((view, position) -> {
-            Bundle bundle = new Bundle();
-            bundle.putSerializable(NoteFragment.ARG_NOTE_SOURCE, (Serializable) noteSource);
-            Fragment noteFragment = new NoteFragment(position);
-            noteFragment.setArguments(bundle);
+            NoteFragment noteFragment = NoteFragment.newInstance(noteSource, position);
             activity.addFragment(noteFragment);
         });
 
@@ -170,7 +167,7 @@ public class ItemsFragment extends Fragment {
 
         switch (id) {
             case R.id.edit_context_menu:
-                activity.addFragment(new EditCurrentItemFragment(noteSource.getNoteData(currentPosition)));
+                activity.addFragment(EditNoteFragment.newInstance(noteSource, currentPosition));
                 return true;
             case R.id.delete_context_menu:
                 noteSource.deleteNoteByPosition(currentPosition);
