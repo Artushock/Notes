@@ -133,7 +133,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
         public void setData(Note note) {
             captureItemNote.setText(note.getNoteCapture());
             descriptionItemNote.setText(note.getNoteDescription());
-            dateItemNote.setText(note.getCreationDateFormatted());
+            dateItemNote.setText(note.getDateFormatted());
         }
 
 

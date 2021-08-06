@@ -12,13 +12,14 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.artushock.notes.data.Note;
 import com.artushock.notes.R;
-import com.artushock.notes.data.NoteSourceImpl;
+import com.artushock.notes.data.NoteSource;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class NoteFragment extends Fragment {
 
-    public static final String ARG_NOTE = "ARG_NOTE";
+    public static final String ARG_NOTE_SOURCE = "ARG_NOTE_SOURCE";
     private Note note;
+    NoteSource noteSource;
     private final int currentPosition;
 
     private TextView captureNote;
@@ -35,16 +36,9 @@ public class NoteFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
-            note = getArguments().getParcelable(ARG_NOTE);
+            noteSource = (NoteSource) getArguments().getSerializable(ARG_NOTE_SOURCE);
+            note = noteSource.getNoteData(currentPosition);
         }
-
-        getParentFragmentManager().setFragmentResultListener("requestForEditedNote", this, (requestKey, result) -> {
-            Note editedNote = result.getParcelable("editCurrentNote");
-            NoteSourceImpl noteSource = NoteSourceImpl.getInstance();
-            noteSource.setNote(editedNote, currentPosition);
-            note = editedNote;
-            initView(getView());
-        });
     }
 
     @Override
@@ -66,7 +60,7 @@ public class NoteFragment extends Fragment {
     private void fillFields() {
         captureNote.setText(note.getNoteCapture());
         descriptionNote.setText(note.getNoteDescription());
-        dateNote.setText(note.getCreationDateFormatted());
+        dateNote.setText(note.getDateFormatted());
         contentNote.setText(note.getNoteContent());
     }
 
@@ -81,11 +75,15 @@ public class NoteFragment extends Fragment {
     }
 
     private void editNoteFabHandling() {
-        Note currentNote = NoteSourceImpl.getInstance().getNoteData(currentPosition);
+        //Note currentNote = NoteSourceImpl.getInstance().getNoteData(currentPosition);
+
+
+
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.replace(R.id.fragment_container, new EditCurrentItemFragment(currentNote));
+        fragmentTransaction.replace(R.id.fragment_container, new EditCurrentItemFragment(note));
         fragmentTransaction.commit();
+
     }
 }

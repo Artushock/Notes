@@ -26,14 +26,18 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.Serializable;
+
 public class ItemsFragment extends Fragment {
-    public static final String TAG = "[ItemsFragment] : ";
+    public static final String TAG = "[Arts_ItemsFragment]";
 
     public static final String REQUEST_KEY_FOR_ADDING_NOTE = "requestForAddingNote";
     public static final String KEY_ADD_NEW_NOTE = "addNewNote";
-    public static final String REQUEST_KEY_FOR_EDITED_NOTE = "requestForEditedNote";
-    public static final String KEY_EDIT_CURRENT_NOTE = "editCurrentNote";
+    public static final String REQUEST_KEY_FOR_EDITED_NOTE_SOURCE = "REQUEST_KEY_FOR_EDITED_NOTE_SOURCE";
+    public static final String KEY_EDITED_NOTE_SOURCE = "KEY_EDITED_NOTE_SOURCE";
     public static final int NO_POSITION_VALUE = -1;
+
+    private static final String ITEM_FRAGMENT_NOTE_SOURCE_KEY = "ITEM_FRAGMENT_NOTE_SOURCE_KEY";
 
 
     private NoteSource noteSource;
@@ -43,11 +47,14 @@ public class ItemsFragment extends Fragment {
     private NoteActivity activity;
 
     public ItemsFragment() {
-
     }
 
-    public static ItemsFragment newInstance() {
-        return new ItemsFragment();
+    public static ItemsFragment newInstance(NoteSource noteSource) {
+        ItemsFragment itemsFragment = new ItemsFragment();
+        Bundle args = new Bundle();
+        args.putSerializable(ITEM_FRAGMENT_NOTE_SOURCE_KEY, (Serializable) noteSource);
+        itemsFragment.setArguments(args);
+        return itemsFragment;
     }
 
     @Override
@@ -60,14 +67,12 @@ public class ItemsFragment extends Fragment {
             noteSource.addNote(note);
         });
 
-        getParentFragmentManager().setFragmentResultListener(REQUEST_KEY_FOR_EDITED_NOTE, this, (requestKey, result) -> {
-            Note editedNote = result.getParcelable(KEY_EDIT_CURRENT_NOTE);
-            noteSource.setNote(editedNote, currentPosition);
-            noteAdapter.notifyItemChanged(currentPosition);
-            recyclerView.scrollToPosition(currentPosition);
+        getParentFragmentManager().setFragmentResultListener(REQUEST_KEY_FOR_EDITED_NOTE_SOURCE, this, (requestKey, result) -> {
+            noteSource = (NoteSource) result.getSerializable(KEY_EDITED_NOTE_SOURCE);
         });
 
-        this.noteSource = (NoteSource) getArguments().getSerializable(NoteActivity.NOTE_SOURCE_KEY);
+        this.noteSource = (NoteSource) getArguments().getSerializable(ITEM_FRAGMENT_NOTE_SOURCE_KEY);
+
         initAdapter(noteSource);
     }
 
@@ -128,15 +133,15 @@ public class ItemsFragment extends Fragment {
 
         noteAdapter.setItemClickListener((view, position) -> {
             Bundle bundle = new Bundle();
-            bundle.putParcelable(NoteFragment.ARG_NOTE, noteSource.getNoteData(position));
+            bundle.putSerializable(NoteFragment.ARG_NOTE_SOURCE, (Serializable) noteSource);
             Fragment noteFragment = new NoteFragment(position);
             noteFragment.setArguments(bundle);
             activity.addFragment(noteFragment);
         });
 
         noteAdapter.setEditClickListener((view, position) -> {
-            currentPosition = position;
-            activity.addFragment(new EditCurrentItemFragment(noteSource.getNoteData(position)));
+            EditNoteFragment editNoteFragment = EditNoteFragment.newInstance(noteSource, position);
+            activity.addFragment(editNoteFragment);
         });
 
         noteAdapter.setCheckedChangeListener((view, position, isChecked) -> {

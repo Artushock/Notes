@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import com.artushock.notes.NoteActivity;
 import com.artushock.notes.R;
 import com.artushock.notes.data.Note;
+import com.artushock.notes.data.NoteSource;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.text.SimpleDateFormat;
@@ -20,6 +21,7 @@ import java.util.Locale;
 import java.util.Objects;
 
 public class EditCurrentItemFragment extends Fragment {
+    NoteSource noteSource;
     private final Note editedNote;
 
     private String editedNoteCapture;
@@ -48,9 +50,9 @@ public class EditCurrentItemFragment extends Fragment {
         editedNoteCapture = editedNote.getNoteCapture();
         editedNoteDescription = editedNote.getNoteDescription();
         editedNoteContent = editedNote.getNoteContent();
-        editedCreationDate = editedNote.getCreationDateFormatted();
+        editedCreationDate = editedNote.getDateFormatted();
 
-        getParentFragmentManager().setFragmentResultListener("requestForAddNoteDate", this, (requestKey, result) -> date = result.getLong("addNoteDate"));
+        getParentFragmentManager().setFragmentResultListener(SetDateFragment.REQUEST_KEY_FOR_EDITED_DATE, this, (requestKey, result) -> date = result.getLong(SetDateFragment.KEY_EDITED_DATE));
 
         if (date == 0) {
             date = new Date().getTime();
@@ -98,8 +100,8 @@ public class EditCurrentItemFragment extends Fragment {
                     editedNoteContent);
 
             Bundle result = new Bundle();
-            result.putParcelable(ItemsFragment.KEY_EDIT_CURRENT_NOTE, note);
-            getParentFragmentManager().setFragmentResult(ItemsFragment.REQUEST_KEY_FOR_EDITED_NOTE, result);
+            result.putParcelable(ItemsFragment.KEY_EDITED_NOTE_SOURCE, note);
+            getParentFragmentManager().setFragmentResult(ItemsFragment.REQUEST_KEY_FOR_EDITED_NOTE_SOURCE, result);
             getParentFragmentManager().popBackStack();
         });
 

@@ -92,11 +92,12 @@ public class NoteActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void initStartFragment() {
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(NOTE_SOURCE_KEY, (Serializable) noteSource);
-        ItemsFragment itemsFragment = ItemsFragment.newInstance();
-        itemsFragment.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, itemsFragment).commit();
+        ItemsFragment itemsFragment = ItemsFragment.newInstance(noteSource);
+        getSupportFragmentManager()
+                .beginTransaction()
+                .addToBackStack(null)
+                .replace(R.id.fragment_container, itemsFragment)
+                .commit();
 
         selectedPositions = new ArrayList<>();
     }

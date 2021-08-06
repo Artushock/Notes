@@ -2,18 +2,24 @@ package com.artushock.notes.ui;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentResultListener;
 
 import com.artushock.notes.NoteActivity;
 import com.artushock.notes.R;
 import com.artushock.notes.data.Note;
 import com.google.android.material.textfield.TextInputEditText;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -22,11 +28,11 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class AddNoteFragment extends Fragment {
-    public static final String REQUEST_KEY_FOR_ADD_NOTE_DATE = "requestForAddNoteDate";
-    public static final String KEY_ADD_NOTE_DATE = "addNoteDate";
+    public static final String TAG = "[Arts_AddNoteFragment]";
+
     private TextInputEditText noteCaptureInputText;
     private TextInputEditText noteDescriptionInputText;
-    private TextInputEditText noteDateInputText;
+    private TextView dateTextView;
     private TextInputEditText noteContentInputText;
     long date;
 
@@ -39,9 +45,15 @@ public class AddNoteFragment extends Fragment {
 
         activity = (NoteActivity) getActivity();
 
-        getParentFragmentManager().setFragmentResultListener(REQUEST_KEY_FOR_ADD_NOTE_DATE, this, (requestKey, result) -> date = result.getLong(KEY_ADD_NOTE_DATE));
+        getParentFragmentManager().setFragmentResultListener(SetDateFragment.REQUEST_KEY_FOR_EDITED_DATE, this, new FragmentResultListener() {
+            @Override
+            public void onFragmentResult(@NonNull @NotNull String requestKey, @NonNull @NotNull Bundle result) {
+                date = result.getLong(SetDateFragment.KEY_EDITED_DATE);
+                Log.d(TAG, "gotten new date = " + date);
+            }
+        });
 
-        if (date == 0) {
+        if (date == 0){
             date = new Date().getTime();
         }
     }
@@ -55,7 +67,7 @@ public class AddNoteFragment extends Fragment {
     private void setDateText() {
         String pattern = "dd.MM.yyyy";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, Locale.getDefault());
-        noteDateInputText.setText(simpleDateFormat.format(date));
+        dateTextView.setText(simpleDateFormat.format(date));
     }
 
     @Override
@@ -69,7 +81,6 @@ public class AddNoteFragment extends Fragment {
 
     private void initView(View view) {
         initTextInputEditTexts(view);
-
         initButtons(view);
     }
 
@@ -77,13 +88,17 @@ public class AddNoteFragment extends Fragment {
     private void initTextInputEditTexts(View view) {
         noteCaptureInputText = view.findViewById(R.id.edit_note_capture_input_edit_text);
         noteDescriptionInputText = view.findViewById(R.id.edit_note_description_input_edit_text);
-        noteDateInputText = view.findViewById(R.id.edit_note_date_input_edit_text);
+        dateTextView = view.findViewById(R.id.date_text_view);
         setDateText();
 
-        noteDateInputText.setOnTouchListener((v, event) -> {
-            activity.addFragment(new SetDateFragment());
-            return true;
+        dateTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "it listener date = " + date);
+                activity.addFragment(SetDateFragment.newInstance(date));
+            }
         });
+
         noteContentInputText = view.findViewById(R.id.edit_note_content_input_edit_text);
     }
 

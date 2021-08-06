@@ -14,7 +14,10 @@ public class Note implements Parcelable {
     private String noteCapture;
     private String noteDescription;
     private String noteContent;
-    private long creationDate;
+
+
+
+    private long date;
 
     public Note() {
     }
@@ -23,14 +26,14 @@ public class Note implements Parcelable {
         this.noteCapture = noteCapture;
         this.noteDescription = noteDescription;
         this.noteContent = noteContent;
-        this.creationDate = date;
+        this.date = date;
     }
 
     public Note(Parcel in) {
         noteCapture = in.readString();
         noteDescription = in.readString();
         noteContent = in.readString();
-        creationDate = in.readLong();
+        date = in.readLong();
     }
 
     public String getId() {
@@ -53,10 +56,14 @@ public class Note implements Parcelable {
         return noteContent;
     }
 
-    public String getCreationDateFormatted() {
+    public long getDate() {
+        return date;
+    }
+
+    public String getDateFormatted() {
         String pattern = "dd.MM.yyyy";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, Locale.getDefault());
-        return simpleDateFormat.format(creationDate);
+        return simpleDateFormat.format(date);
     }
 
     @Override
@@ -64,7 +71,7 @@ public class Note implements Parcelable {
         dest.writeString(noteCapture);
         dest.writeString(noteDescription);
         dest.writeString(noteContent);
-        dest.writeLong(creationDate);
+        dest.writeLong(date);
     }
 
     @Override
