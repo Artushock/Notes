@@ -30,4 +30,10 @@
     <string name="exit_nav_menu_str">Выход</string>
     <string name="clear_selected_note_menu_str">Удалить выделенные</string>
     <string name="continue_">Продолжить…</string>
+    <string name="Yes">Да</string>
+    <string name="No">Нет</string>
+    <string name="are_u_sure_remove_selected_notes">Вы уверены, что хотите удалить выделенные элементы?</string>
+    <string name="are_u_sure_remove_all_notes">Вы уверены, что хотите удалить все элементы?</string>
+    <string name="press_again">Для выхода нажмите кнопку Назад еще раз</string>
+    <string name="Attention">Внимание!</string>
 </resources>

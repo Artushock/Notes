@@ -2,7 +2,6 @@ package com.artushock.notes;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -93,7 +92,7 @@ public class NoteActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void initNavigationMenu() {
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
 
@@ -135,20 +134,16 @@ public class NoteActivity extends AppCompatActivity implements NavigationView.On
 
 
         new AlertDialog.Builder(this)
-                .setTitle("Вы уверены что хотите удалить выделенные элементы?")
+                .setTitle(R.string.Attention)
+                .setMessage(R.string.are_u_sure_remove_selected_notes)
+                .setIcon(R.drawable.attention)
                 .setCancelable(false)
-                .setPositiveButton("Да", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        removeSelectedNotes();
-                        initStartFragment();
-                    }
+                .setPositiveButton(R.string.Yes, (dialog, which) -> {
+                    removeSelectedNotes();
+                    initStartFragment();
                 })
-                .setNegativeButton("Нет", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
+                .setNegativeButton(R.string.No, (dialog, which) -> {
+                    // do nothing
                 })
                 .show();
     }
@@ -156,20 +151,16 @@ public class NoteActivity extends AppCompatActivity implements NavigationView.On
     private void alertRemoveAllNotes() {
 
         new AlertDialog.Builder(this)
-                .setTitle("Вы уверены что хотите удалить все элементы?")
+                .setTitle(R.string.Attention)
+                .setMessage(R.string.are_u_sure_remove_all_notes)
+                .setIcon(R.drawable.attention)
                 .setCancelable(false)
-                .setPositiveButton("Да", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        noteSource.clearNoteList();
-                        initStartFragment();
-                    }
+                .setPositiveButton(R.string.Yes, (dialog, which) -> {
+                    noteSource.clearNoteList();
+                    initStartFragment();
                 })
-                .setNegativeButton("Нет", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
+                .setNegativeButton(R.string.No, (dialog, which) -> {
+                    // do nothing
                 })
                 .show();
     }
@@ -192,30 +183,23 @@ public class NoteActivity extends AppCompatActivity implements NavigationView.On
                 break;
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
 
-
     @Override
     public void onBackPressed() {
-        if (doubleBackToExitPressedOnce) {
+        if (doubleBackToExitPressedOnce || getSupportFragmentManager().getBackStackEntryCount() != 0) {
             super.onBackPressed();
             return;
         }
 
         this.doubleBackToExitPressedOnce = true;
-        Toast.makeText(this, "Для выхода нажмите кнопку Назад еще раз", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getResources().getText(R.string.press_again), Toast.LENGTH_SHORT).show();
 
-       new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-
-            @Override
-            public void run() {
-                doubleBackToExitPressedOnce=false;
-            }
-        }, 2000);
+        new Handler(Looper.getMainLooper()).postDelayed(() -> doubleBackToExitPressedOnce = false, 2000);
     }
 
 
