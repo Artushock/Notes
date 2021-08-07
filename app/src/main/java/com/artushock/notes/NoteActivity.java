@@ -1,10 +1,15 @@
 package com.artushock.notes;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.PersistableBundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -33,6 +38,8 @@ public class NoteActivity extends AppCompatActivity implements NavigationView.On
 
     private NoteSource noteSource;
     private List<Integer> selectedPositions;
+
+    boolean doubleBackToExitPressedOnce = false;
 
     public void addSelectedPosition(Integer position) {
         selectedPositions.add(position);
@@ -114,16 +121,57 @@ public class NoteActivity extends AppCompatActivity implements NavigationView.On
                 addFragment(new AddNoteFragment());
                 return true;
             case R.id.clear_all_note_menu:
-                noteSource.clearNoteList();
-                initStartFragment();
+                alertRemoveAllNotes();
                 return true;
             case R.id.clear_selected_note_menu:
-                removeSelectedNotes();
-                initStartFragment();
+                alertRemoveSelectedNotes();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void alertRemoveSelectedNotes() {
+
+
+        new AlertDialog.Builder(this)
+                .setTitle("Вы уверены что хотите удалить выделенные элементы?")
+                .setCancelable(false)
+                .setPositiveButton("Да", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        removeSelectedNotes();
+                        initStartFragment();
+                    }
+                })
+                .setNegativeButton("Нет", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                })
+                .show();
+    }
+
+    private void alertRemoveAllNotes() {
+
+        new AlertDialog.Builder(this)
+                .setTitle("Вы уверены что хотите удалить все элементы?")
+                .setCancelable(false)
+                .setPositiveButton("Да", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        noteSource.clearNoteList();
+                        initStartFragment();
+                    }
+                })
+                .setNegativeButton("Нет", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                })
+                .show();
     }
 
     @SuppressLint("NonConstantResourceId")
@@ -147,6 +195,27 @@ public class NoteActivity extends AppCompatActivity implements NavigationView.On
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+
+
+    @Override
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            return;
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Для выхода нажмите кнопку Назад еще раз", Toast.LENGTH_SHORT).show();
+
+       new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce=false;
+            }
+        }, 2000);
     }
 
 
