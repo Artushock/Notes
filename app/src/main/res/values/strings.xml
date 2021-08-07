@@ -29,4 +29,5 @@
     <string name="clear_all_note_menu_str">Очистить все</string>
     <string name="exit_nav_menu_str">Выход</string>
     <string name="clear_selected_note_menu_str">Удалить выделенные</string>
+    <string name="continue_">Продолжить…</string>
 </resources>
