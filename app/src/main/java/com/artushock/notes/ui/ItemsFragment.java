@@ -21,7 +21,6 @@ import com.artushock.notes.NoteActivity;
 import com.artushock.notes.R;
 import com.artushock.notes.data.Note;
 import com.artushock.notes.data.NoteSource;
-import com.artushock.notes.data.NoteSourceResponse;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.jetbrains.annotations.NotNull;
@@ -41,7 +40,6 @@ public class ItemsFragment extends Fragment {
 
 
     private NoteSource noteSource;
-    private RecyclerView recyclerView;
     private NoteAdapter noteAdapter;
     int currentPosition = NO_POSITION_VALUE;
     private NoteActivity activity;
@@ -67,9 +65,7 @@ public class ItemsFragment extends Fragment {
             noteSource.addNote(note);
         });
 
-        getParentFragmentManager().setFragmentResultListener(REQUEST_KEY_FOR_EDITED_NOTE_SOURCE, this, (requestKey, result) -> {
-            noteSource = (NoteSource) result.getSerializable(KEY_EDITED_NOTE_SOURCE);
-        });
+        getParentFragmentManager().setFragmentResultListener(REQUEST_KEY_FOR_EDITED_NOTE_SOURCE, this, (requestKey, result) -> noteSource = (NoteSource) result.getSerializable(KEY_EDITED_NOTE_SOURCE));
 
         this.noteSource = (NoteSource) getArguments().getSerializable(ITEM_FRAGMENT_NOTE_SOURCE_KEY);
 
@@ -83,12 +79,9 @@ public class ItemsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_note_items, container, false);
 
 
-        noteSource = noteSource.init(new NoteSourceResponse() {
-            @Override
-            public void initialized(NoteSource noteSource) {
-                noteAdapter.notifyDataSetChanged();
-                Log.d(TAG, "notifyDataSetChanged()");
-            }
+        noteSource = noteSource.init(noteSource -> {
+            noteAdapter.notifyDataSetChanged();
+            Log.d(TAG, "notifyDataSetChanged()");
         });
 
         noteAdapter.setDataSource(noteSource);
@@ -111,7 +104,7 @@ public class ItemsFragment extends Fragment {
     }
 
     private void initRecyclerView(View view) {
-        recyclerView = view.findViewById(R.id.recycler_view_list);
+        RecyclerView recyclerView = view.findViewById(R.id.recycler_view_list);
         recyclerView.setHasFixedSize(true);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());

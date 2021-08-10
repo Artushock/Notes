@@ -9,18 +9,15 @@ import android.widget.Button;
 import android.widget.DatePicker;
 
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
+import androidx.fragment.app.DialogFragment;
 
 import com.artushock.notes.R;
 
-import java.time.LocalDateTime;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
 
-public class SetDateFragment extends Fragment {
+public class SetDateDialog extends DialogFragment {
 
-    public static final String TAG = "[Arts_SetDateFragment]";
+    public static final String TAG = "[Arts_SetDateDialog]";
 
     public static final String REQUEST_KEY_FOR_EDITED_DATE = "REQUEST_KEY_FOR_EDITED_DATE";
     public static final String KEY_EDITED_DATE = "KEY_EDITED_DATE";
@@ -28,32 +25,31 @@ public class SetDateFragment extends Fragment {
 
     private long date;
 
-    public SetDateFragment() {
+    public SetDateDialog() {
     }
 
-    public static Fragment newInstance(long date) {
-        SetDateFragment setDateFragment = new SetDateFragment();
+    public static DialogFragment newInstance(long date) {
+        SetDateDialog fragment = new SetDateDialog();
         Bundle args = new Bundle();
         args.putLong(EDITED_DATE_KEY, date);
-        setDateFragment.setArguments(args);
+        fragment.setArguments(args);
         Log.d(TAG, "date = " + date);
-        return setDateFragment;
+        return fragment;
     }
 
     @Override
-    public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null){
             date = getArguments().getLong(EDITED_DATE_KEY);
         }
     }
 
+    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_set_date, container, false);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+        View view  = inflater.inflate(R.layout.dialog_set_date, null);
         initView(view);
-
         return view;
     }
 
@@ -67,27 +63,23 @@ public class SetDateFragment extends Fragment {
         int day = calendar.get(Calendar.DATE);
         Log.d(TAG, "gotten Y,M,D " + year + ", " + month +", " + day + ".");
 
-        datePicker.init(year, month, day, new DatePicker.OnDateChangedListener() {
-            @Override
-            public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                calendar.set(year, monthOfYear, dayOfMonth);
-                date = calendar.getTimeInMillis();
-                Log.d(TAG, "Changed date " + date);
-            }
+        datePicker.init(year, month, day, (view1, year1, monthOfYear, dayOfMonth) -> {
+            calendar.set(year1, monthOfYear, dayOfMonth);
+            date = calendar.getTimeInMillis();
+            Log.d(TAG, "Changed date " + date);
         });
-
-
 
         Button saveDateButton = view.findViewById(R.id.save_date_btn);
         saveDateButton.setOnClickListener(v -> saveDateButtonHandling());
+
     }
 
     private void saveDateButtonHandling() {
-        //getParentFragmentManager().popBackStack(); //
         Log.d(TAG, "date = " + date);
+
         Bundle result = new Bundle();
         result.putLong(KEY_EDITED_DATE, date);
         getParentFragmentManager().setFragmentResult(REQUEST_KEY_FOR_EDITED_DATE, result);
-        getParentFragmentManager().popBackStack();
+        dismiss();
     }
 }

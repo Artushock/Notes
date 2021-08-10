@@ -11,8 +11,8 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
-import com.artushock.notes.NoteActivity;
 import com.artushock.notes.R;
 import com.artushock.notes.data.Note;
 import com.google.android.material.textfield.TextInputEditText;
@@ -32,29 +32,19 @@ public class AddNoteFragment extends Fragment {
     private TextInputEditText noteContentInputText;
     long date;
 
-    private NoteActivity activity;
-
-
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        activity = (NoteActivity) getActivity();
-
-        getParentFragmentManager().setFragmentResultListener(SetDateFragment.REQUEST_KEY_FOR_EDITED_DATE, this, (requestKey, result) -> {
-            date = result.getLong(SetDateFragment.KEY_EDITED_DATE);
+        getParentFragmentManager().setFragmentResultListener(SetDateDialog.REQUEST_KEY_FOR_EDITED_DATE, this, (requestKey, result) -> {
+            date = result.getLong(SetDateDialog.KEY_EDITED_DATE);
+            setDateText();
             Log.d(TAG, "gotten new date = " + date);
         });
 
         if (date == 0){
             date = new Date().getTime();
         }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        setDateText();
     }
 
     private void setDateText() {
@@ -84,12 +74,15 @@ public class AddNoteFragment extends Fragment {
         dateTextView = view.findViewById(R.id.date_text_view);
         setDateText();
 
-        dateTextView.setOnClickListener(v -> {
-            Log.d(TAG, "it listener date = " + date);
-            activity.addFragment(SetDateFragment.newInstance(date));
-        });
+        dateTextView.setOnClickListener(v -> showSetDateDialog());
 
         noteContentInputText = view.findViewById(R.id.edit_note_content_input_edit_text);
+    }
+
+    private void showSetDateDialog() {
+        FragmentManager fragmentManager = getParentFragmentManager();
+        SetDateDialog dateDialog = (SetDateDialog) SetDateDialog.newInstance(date);
+        dateDialog.show(fragmentManager, "transactionTag");
     }
 
     private void initButtons(View view) {

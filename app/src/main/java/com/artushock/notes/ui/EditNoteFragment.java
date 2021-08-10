@@ -10,8 +10,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
-import com.artushock.notes.NoteActivity;
 import com.artushock.notes.R;
 import com.artushock.notes.data.Note;
 import com.artushock.notes.data.NoteSource;
@@ -64,9 +64,10 @@ public class EditNoteFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        getParentFragmentManager().setFragmentResultListener(SetDateFragment.REQUEST_KEY_FOR_EDITED_DATE, this, (requestKey, result) -> {
-            date = result.getLong(SetDateFragment.KEY_EDITED_DATE);
-            Log.d(TAG, "date = " + date);
+        getParentFragmentManager().setFragmentResultListener(SetDateDialog.REQUEST_KEY_FOR_EDITED_DATE, this, (requestKey, result) -> {
+            date = result.getLong(SetDateDialog.KEY_EDITED_DATE);
+            Log.d(TAG, "Result from picker date = " + date);
+            setDateText();
         });
 
         if (getArguments() != null) {
@@ -81,13 +82,6 @@ public class EditNoteFragment extends Fragment {
 
         initNoteFields();
         Log.d(TAG, "onCreate");
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        setDateText();
-        Log.d(TAG, "onResume");
     }
 
     private void setDateText() {
@@ -117,11 +111,7 @@ public class EditNoteFragment extends Fragment {
         editNoteDescriptionInputText = view.findViewById(R.id.edit_note_description_input_edit_text);
         dateTextView = view.findViewById(R.id.edit_date_text_view);
 
-        dateTextView.setOnClickListener(v -> {
-            NoteActivity noteActivity = (NoteActivity) requireActivity();
-            Log.d(TAG, "date = " + date);
-            noteActivity.addFragment(SetDateFragment.newInstance(date));
-        });
+        dateTextView.setOnClickListener(v -> showSetDateDialog());
 
         editNoteContentInputText = view.findViewById(R.id.edit_note_content_input_edit_text);
 
@@ -154,6 +144,12 @@ public class EditNoteFragment extends Fragment {
         });
 
         cancelEditNoteButton.setOnClickListener(v -> requireActivity().getSupportFragmentManager().popBackStack());
+    }
+
+    private void showSetDateDialog() {
+        FragmentManager fragmentManager = getParentFragmentManager();
+        SetDateDialog dateDialog = (SetDateDialog) SetDateDialog.newInstance(date);
+        dateDialog.show(fragmentManager, "transactionTag");
     }
 
     private void readFields() {
