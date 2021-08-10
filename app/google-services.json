@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1039670789763",
+    "project_id": "artushocknotes",
+    "storage_bucket": "artushocknotes.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1039670789763:android:3c75f54415865435553db6",
+        "android_client_info": {
+          "package_name": "com.artushock.notes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1039670789763-vkfslimvhgkprd0tva0mks189vot2c9f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBthvk5eRE9IQrPsnmIBoC5lFfD2xKotU4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1039670789763-vkfslimvhgkprd0tva0mks189vot2c9f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
