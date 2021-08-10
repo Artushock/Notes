@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/add_note_menu"
+        android:orderInCategory="0"
+        android:title="@string/add_note_menu_str" />
+    <item
+        android:id="@+id/clear_all_note_menu"
+        android:orderInCategory="1"
+        android:title="@string/clear_all_note_menu_str" />
+    <item
+        android:id="@+id/clear_selected_note_menu"
+        android:orderInCategory="2"
+        android:title="@string/clear_selected_note_menu_str" />
+</menu>
